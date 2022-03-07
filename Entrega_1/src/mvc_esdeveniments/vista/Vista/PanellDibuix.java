@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import mvc_esdeveniments.MeuError;
@@ -51,6 +52,7 @@ public class PanellDibuix extends JPanel {
 
     public void paint(Graphics gr) {
         Graphics2D aux = (Graphics2D) gr;
+        aux.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if (bima == null) {
             if (this.getWidth() > 0) {
                 bima = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
