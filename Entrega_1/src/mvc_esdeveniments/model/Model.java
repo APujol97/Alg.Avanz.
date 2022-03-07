@@ -20,12 +20,14 @@ public class Model implements PerEsdeveniments {
     private int n;
     private int pixels;
     private int tipo=0;
+    private int percent;
 
     public Model(MVC_Esdeveniments p) {
         prog = p;
         oldX = oldY = x = y = 0;
         n = 0;
         pixels = 10;
+        percent = 0;
     }
 
     public void setPixels(int pixels) {
@@ -49,6 +51,14 @@ public class Model implements PerEsdeveniments {
     public void setN(int n) {
         this.n = n;
     }
+    
+    public void setPercent(int valor) {
+        percent = valor;
+    }
+    
+    public void setTipo(int t) {
+        tipo = t;
+    }
 
     public int getX() {
         return x;
@@ -70,6 +80,10 @@ public class Model implements PerEsdeveniments {
         return n;
     }
     
+    public int getPercent() {
+        return percent;
+    }
+    
     public void resetVariables(){
         oldX = oldY = x = y = 0;
         n = 0;
@@ -79,7 +93,6 @@ public class Model implements PerEsdeveniments {
         oldY = y;
         oldX = x;
         n++;
-        tipo=1;
         
         long tiempo = System.currentTimeMillis();
         for (int i = 0; i < n; i++) {
@@ -92,13 +105,13 @@ public class Model implements PerEsdeveniments {
         y = (int)(System.currentTimeMillis()- tiempo);
         
         x = n * pixels;
+        percent = Math.round( (n/32f) * 100);
     }
 
     private void calcularOlogn() {
         oldY = y;
         oldX = x;
         n++;
-        tipo=2;
        
         long tiempo = System.currentTimeMillis();
         for (int j = n; j > 0; j = j / 2) {
@@ -111,13 +124,13 @@ public class Model implements PerEsdeveniments {
         y = (int)(System.currentTimeMillis()- tiempo);
 
         x = n * pixels;
+        percent = Math.round( (n/32f) * 100);
     }
 
     private void calcularOn2() {
         oldY = y;
         oldX = x;
         n++;
-        tipo=3;
     
         long tiempo = System.currentTimeMillis();
         for (int i = 0; i < n; i++) {
@@ -132,8 +145,29 @@ public class Model implements PerEsdeveniments {
         y = (int)(System.currentTimeMillis()- tiempo);
   
         x = n * pixels;
+        percent = Math.round( (n/32f) * 100);
     }
-
+    
+    private void calcularOnlogn() {
+        oldY = y;
+        oldX = x;
+        n++;
+    
+        long tiempo = System.currentTimeMillis();
+        for (int i = 0; i < n; i++) {
+            for (int j = n; j > 0; j = j/2) {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException ex) {
+                    MeuError.informaError(ex);
+                }
+            }
+        }
+        y = (int)(System.currentTimeMillis()- tiempo);
+  
+        x = n * pixels;
+        percent = Math.round( (n/32f) * 100);
+    }
     
     @Override
     public void notificar(String s) {
@@ -143,6 +177,8 @@ public class Model implements PerEsdeveniments {
             this.calcularOlogn();
         } else if (s.startsWith("O(n2)")) {
             this.calcularOn2();
+        } else if (s.startsWith("O(nlogn)")) {
+            this.calcularOnlogn();
         }
     }
 }
