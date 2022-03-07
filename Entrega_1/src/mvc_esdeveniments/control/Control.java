@@ -26,6 +26,7 @@ public class Control extends Thread implements PerEsdeveniments {
     public void run() {
         switch (tipo) {
             case 1:
+                prog.getModel().setTipo(1);
                 for (int i = 0; i < iteraciones; i++) {
                     prog.getModel().notificar("O(n)");
                     espera(1000 / 25, 0);
@@ -35,6 +36,7 @@ public class Control extends Thread implements PerEsdeveniments {
                 
                 break;
             case 2:
+                prog.getModel().setTipo(2);
                 for (int i = 0; i < iteraciones; i++) {
                     prog.getModel().notificar("O(logn)");
                     espera(1000 / 25, 0);
@@ -43,12 +45,22 @@ public class Control extends Thread implements PerEsdeveniments {
                 System.out.println("Fin del calculo 0(logn)");
                 break;
             case 3:
+                prog.getModel().setTipo(3);
                 for (int i = 0; i < iteraciones; i++) {
                     prog.getModel().notificar("O(n2)");
                     espera(1000 / 25, 0);
                 }
                 prog.getModel().resetVariables();
                 System.out.println("Fin del calculo 0(n2)");
+                break;
+            case 4:
+                prog.getModel().setTipo(4);
+                for (int i = 0; i < iteraciones; i++) {
+                    prog.getModel().notificar("O(nlogn)");
+                    espera(1000 / 25, 0);
+                }
+                prog.getModel().resetVariables();
+                System.out.println("Fin del calculo 0(nlogn)");
                 break;
             default:
                 break;
@@ -74,6 +86,9 @@ public class Control extends Thread implements PerEsdeveniments {
             this.start();
         } else if (s.startsWith("O(n2)")) {
             tipo = 3;
+            this.start();
+        } else if (s.startsWith("O(nlogn)")) {
+            tipo = 4;
             this.start();
         }
     }

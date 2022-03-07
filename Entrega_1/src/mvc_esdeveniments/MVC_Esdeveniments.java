@@ -48,6 +48,9 @@ public class MVC_Esdeveniments implements PerEsdeveniments {
         } else if(s.startsWith("O(n2)")){
                 con = new Control(this);
                 con.notificar(s);
+        } else if(s.startsWith("O(nlogn)")){
+                con = new Control(this);
+                con.notificar(s);
         }
         
     }

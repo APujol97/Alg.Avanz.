@@ -10,9 +10,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import mvc_esdeveniments.MeuError;
@@ -83,9 +80,13 @@ public class PanellDibuix extends JPanel {
             case 3:
                 aux.setColor(Color.green);
                 break;
+            case 4:
+                aux.setColor(Color.PINK);
+                break;
         }
         
-        aux.drawLine(mod.getOldX(), mod.getOldY(), mod.getX(), mod.getY());  
+        aux.drawLine(mod.getOldX(), ( getHeight() - mod.getOldY() ), mod.getX(), ( getHeight() - mod.getY() ));
+        vis.actualizarBarra(mod.getPercent());
     }
 }
 

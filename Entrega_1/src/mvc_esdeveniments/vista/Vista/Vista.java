@@ -8,11 +8,10 @@ package mvc_esdeveniments.vista.Vista;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import mvc_esdeveniments.MVC_Esdeveniments;
 import mvc_esdeveniments.MeuError;
 
@@ -23,6 +22,7 @@ import mvc_esdeveniments.MeuError;
 public class Vista extends JFrame implements ActionListener {
 
     private MVC_Esdeveniments prog;
+    private JProgressBar barra;
 
     public Vista(String s, MVC_Esdeveniments p) {
         super(s);
@@ -41,13 +41,27 @@ public class Vista extends JFrame implements ActionListener {
         JButton boto_o_n_2 = new JButton("O(n2)");
         boto_o_n_2.addActionListener(this);
         bots.add(boto_o_n_2);
+        
+        JButton boto_o_n_log_n = new JButton("O(nlogn)");
+        boto_o_n_log_n.addActionListener(this);
+        bots.add(boto_o_n_log_n);
+        
+        barra = new JProgressBar(0, 100);
+        barra.setValue(0);
+        barra.setStringPainted(true);
         //--
         this.add(BorderLayout.NORTH, bots);
         PanellDibuix panell = new PanellDibuix(800, 400, prog.getModel(), this);
         
         this.add(BorderLayout.CENTER, panell);
+        
+        this.add(BorderLayout.SOUTH, barra);
        
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+    
+    public void actualizarBarra(int valor) {
+        barra.setValue(valor);
     }
 
     public void mostrar() {
