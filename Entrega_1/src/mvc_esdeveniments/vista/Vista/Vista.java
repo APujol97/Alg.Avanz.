@@ -8,6 +8,8 @@ package mvc_esdeveniments.vista.Vista;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -42,13 +44,16 @@ public class Vista extends JFrame implements ActionListener {
         //--
         this.add(BorderLayout.NORTH, bots);
         PanellDibuix panell = new PanellDibuix(800, 400, prog.getModel(), this);
+        
         this.add(BorderLayout.CENTER, panell);
+       
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public void mostrar() {
         this.pack();
         this.setVisible(true);
+        
         try {
             Thread.sleep(500);
         } catch (Exception e) {
@@ -65,4 +70,6 @@ public class Vista extends JFrame implements ActionListener {
         comanda = comanda.substring(a, comanda.indexOf(",", a));
         prog.notificar(comanda);
     }
+
+  
 }

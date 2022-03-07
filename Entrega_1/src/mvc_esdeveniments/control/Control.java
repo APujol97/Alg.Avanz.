@@ -17,6 +17,7 @@ public class Control extends Thread implements PerEsdeveniments {
 
     private MVC_Esdeveniments prog;
     private int tipo;
+    private int iteraciones=32;
 
     public Control(MVC_Esdeveniments p) {
         prog = p;
@@ -25,26 +26,29 @@ public class Control extends Thread implements PerEsdeveniments {
     public void run() {
         switch (tipo) {
             case 1:
-                for (int i = 0; i < 32; i++) {
+                for (int i = 0; i < iteraciones; i++) {
                     prog.getModel().notificar("O(n)");
                     espera(1000 / 25, 0);
                 }
+                System.out.println("Fin del calculo 0(n) ");
                 prog.getModel().resetVariables();
                 
                 break;
             case 2:
-                for (int i = 0; i < 32; i++) {
+                for (int i = 0; i < iteraciones; i++) {
                     prog.getModel().notificar("O(logn)");
                     espera(1000 / 25, 0);
                 }
                 prog.getModel().resetVariables();
+                System.out.println("Fin del calculo 0(logn)");
                 break;
             case 3:
-                for (int i = 0; i < 32; i++) {
+                for (int i = 0; i < iteraciones; i++) {
                     prog.getModel().notificar("O(n2)");
                     espera(1000 / 25, 0);
                 }
                 prog.getModel().resetVariables();
+                System.out.println("Fin del calculo 0(n2)");
                 break;
             default:
                 break;

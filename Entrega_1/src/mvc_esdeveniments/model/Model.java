@@ -19,12 +19,21 @@ public class Model implements PerEsdeveniments {
     private int oldX, oldY, x, y;
     private int n;
     private int pixels;
+    private int tipo=0;
 
     public Model(MVC_Esdeveniments p) {
         prog = p;
         oldX = oldY = x = y = 0;
         n = 0;
         pixels = 10;
+    }
+
+    public void setPixels(int pixels) {
+        this.pixels = pixels;
+    }
+
+    public int getTipo() {
+        return tipo;
     }
 
     public void setXY(int x, int y) {
@@ -70,8 +79,9 @@ public class Model implements PerEsdeveniments {
         oldY = y;
         oldX = x;
         n++;
-        long tope = 1000000000L * 10L;   //10 segundos
-        long tiempo = System.nanoTime();
+        tipo=1;
+        
+        long tiempo = System.currentTimeMillis();
         for (int i = 0; i < n; i++) {
             try {
                 Thread.sleep(1);
@@ -79,7 +89,8 @@ public class Model implements PerEsdeveniments {
                 MeuError.informaError(ex);
             }
         }
-        y = (int) ((System.nanoTime() - tiempo) * 100L / tope) * 2;
+        y = (int)(System.currentTimeMillis()- tiempo);
+        
         x = n * pixels;
     }
 
@@ -87,8 +98,9 @@ public class Model implements PerEsdeveniments {
         oldY = y;
         oldX = x;
         n++;
-        long tope = 1000000000L * 10L;   //10 segundos
-        long tiempo = System.nanoTime();
+        tipo=2;
+       
+        long tiempo = System.currentTimeMillis();
         for (int j = n; j > 0; j = j / 2) {
             try {
                 Thread.sleep(1);
@@ -96,7 +108,8 @@ public class Model implements PerEsdeveniments {
                 MeuError.informaError(ex);
             }
         }
-        y = (int) ((System.nanoTime() - tiempo) * 100L / tope);
+        y = (int)(System.currentTimeMillis()- tiempo);
+
         x = n * pixels;
     }
 
@@ -104,8 +117,9 @@ public class Model implements PerEsdeveniments {
         oldY = y;
         oldX = x;
         n++;
-        long tope = 1000000000L * 10L;   //10 segundos
-        long tiempo = System.nanoTime();
+        tipo=3;
+    
+        long tiempo = System.currentTimeMillis();
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 try {
@@ -115,10 +129,12 @@ public class Model implements PerEsdeveniments {
                 }
             }
         }
-        y = (int) ((System.nanoTime() - tiempo) * 100L / tope);
+        y = (int)(System.currentTimeMillis()- tiempo);
+  
         x = n * pixels;
     }
 
+    
     @Override
     public void notificar(String s) {
         if (s.startsWith("O(n)")) {

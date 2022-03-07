@@ -5,9 +5,12 @@
  */
 package mvc_esdeveniments.vista.Vista;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -19,7 +22,7 @@ import mvc_esdeveniments.model.Model;
  *
  * @author mascport
  */
-public class PanellDibuix extends JPanel implements MouseListener {
+public class PanellDibuix extends JPanel {
 
     private int w;
     private int h;
@@ -35,35 +38,12 @@ public class PanellDibuix extends JPanel implements MouseListener {
         mod = m;
         vis = v;
         bima = null;
-        this.addMouseListener(this);
         this.setPreferredSize(new Dimension(w, h));
+        
+                
         procpin = new ProcesPintat(this);
+        //el 30 es por las iteraciones, si las iteraciones son fijas pues lo podemos dejar asi pero si las introduce el ususario habria que cambiar
         procpin.start();
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        ;
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        ;
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        ;
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        ;
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        ;
     }
 
     public void repaint() {
@@ -73,25 +53,39 @@ public class PanellDibuix extends JPanel implements MouseListener {
     }
 
     public void paint(Graphics gr) {
+        Graphics2D aux = (Graphics2D) gr;
         if (bima == null) {
             if (this.getWidth() > 0) {
                 bima = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
                 bima.getGraphics().setColor(Color.white);
                 bima.getGraphics().fillRect(0, 0, bima.getWidth(), bima.getHeight());
             }
+
         }
-        gr.drawLine(mod.getOldX(), mod.getOldY(), mod.getX(), mod.getY());
+        mod.setPixels((int) getWidth() / 30);
+
+        aux.setStroke(new BasicStroke(2.0f));
         
-        //poner barra progreso %
+        aux.setColor(Color.BLACK);
+       
+        aux.drawLine(0, 0, 0, getHeight());
+        aux.drawLine(0, 0, getWidth(), 0);
+        aux.drawLine(getWidth(), 0, getWidth(), getHeight());
+        aux.drawLine(0, getHeight(), getWidth(), getHeight());
+
+        switch (mod.getTipo()) {
+            case 1:
+                aux.setColor(Color.BLUE);
+                break;
+            case 2:
+                aux.setColor(Color.RED);
+                break;
+            case 3:
+                aux.setColor(Color.green);
+                break;
+        }
         
-//        int x = mod.getX();
-//        int y = mod.getY();
-//        double g = mod.getGrau();
-//        int r = mod.getRadi();
-//        x = x + (int) (r * Math.cos(g));
-//        y = y + (int) (r * Math.sin(g));
-//        gr.setColor(Color.red);
-//        gr.fillOval(x, y, mod.getMasa(), mod.getMasa());
+        aux.drawLine(mod.getOldX(), mod.getOldY(), mod.getX(), mod.getY());  
     }
 }
 
