@@ -66,6 +66,7 @@ public class Vista extends JFrame implements ActionListener {
 
     public void mostrar() {
         this.pack();
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
         
         try {

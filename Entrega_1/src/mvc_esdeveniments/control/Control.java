@@ -33,7 +33,6 @@ public class Control extends Thread implements PerEsdeveniments {
                 }
                 System.out.println("Fin del calculo 0(n) ");
                 prog.getModel().resetVariables();
-                
                 break;
             case 2:
                 prog.getModel().setTipo(2);

@@ -97,7 +97,7 @@ public class Model implements PerEsdeveniments {
         long tiempo = System.currentTimeMillis();
         for (int i = 0; i < n; i++) {
             try {
-                Thread.sleep(1);
+                Thread.sleep(2);
             } catch (InterruptedException ex) {
                 MeuError.informaError(ex);
             }
@@ -116,7 +116,7 @@ public class Model implements PerEsdeveniments {
         long tiempo = System.currentTimeMillis();
         for (int j = n; j > 0; j = j / 2) {
             try {
-                Thread.sleep(1);
+                Thread.sleep(2);
             } catch (InterruptedException ex) {
                 MeuError.informaError(ex);
             }
@@ -136,7 +136,7 @@ public class Model implements PerEsdeveniments {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 try {
-                    Thread.sleep(1);
+                    Thread.sleep(2);
                 } catch (InterruptedException ex) {
                     MeuError.informaError(ex);
                 }
@@ -157,7 +157,7 @@ public class Model implements PerEsdeveniments {
         for (int i = 0; i < n; i++) {
             for (int j = n; j > 0; j = j/2) {
                 try {
-                    Thread.sleep(1);
+                    Thread.sleep(2);
                 } catch (InterruptedException ex) {
                     MeuError.informaError(ex);
                 }
