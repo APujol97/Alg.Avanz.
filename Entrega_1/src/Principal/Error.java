@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mvc_esdeveniments;
+package Principal;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -13,11 +13,11 @@ import java.io.Writer;
 import java.util.Date;
 
 /**
- * Classe per homogeneizar l'amissió d'errors.
  *
- * @author mascport
+ *
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
-public class MeuError {
+public class Error {
 
     static public void informaError(Exception ex) {
         Writer writer = new StringWriter();
@@ -37,7 +37,7 @@ public class MeuError {
             br.close();
             fr.close();
         } catch (Exception e) {
-            System.err.println("Error a la manipulació de l'arxiu de logs.");
+            System.err.println("Error en la gestión de logs.");
             e.printStackTrace();
         }
     }

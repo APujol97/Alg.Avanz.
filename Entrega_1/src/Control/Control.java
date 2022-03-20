@@ -3,23 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mvc_esdeveniments.control;
+package Control;
 
-import mvc_esdeveniments.MVC_Esdeveniments;
-import mvc_esdeveniments.MeuError;
-import mvc_esdeveniments.PerEsdeveniments;
+import Principal.Main;
+import Principal.Error;
+import Principal.Eventos;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
-public class Control extends Thread implements PerEsdeveniments {
+public class Control extends Thread implements Eventos {
 
-    private MVC_Esdeveniments prog;
+    private Main prog;
     private int tipo;
     private int iteraciones=32;
 
-    public Control(MVC_Esdeveniments p) {
+    public Control(Main p) {
         prog = p;
     }
 
@@ -71,7 +71,7 @@ public class Control extends Thread implements PerEsdeveniments {
         try {
             Thread.sleep(m, n);
         } catch (Exception e) {
-            MeuError.informaError(e);
+            Error.informaError(e);
         }
     }
 

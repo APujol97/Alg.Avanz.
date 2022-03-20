@@ -3,26 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mvc_esdeveniments.model;
+package Modelo;
 
-import mvc_esdeveniments.MVC_Esdeveniments;
-import mvc_esdeveniments.MeuError;
-import mvc_esdeveniments.PerEsdeveniments;
+import Principal.Main;
+import Principal.Error;
+import Principal.Eventos;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
-public class Model implements PerEsdeveniments {
+public class Model implements Eventos {
 
-    private MVC_Esdeveniments prog;
+    private Main prog;
     private int oldX, oldY, x, y;
     private int n;
     private int pixels;
     private int tipo=0;
     private int percent;
 
-    public Model(MVC_Esdeveniments p) {
+    public Model(Main p) {
         prog = p;
         oldX = oldY = x = y = 0;
         n = 0;
@@ -99,7 +99,7 @@ public class Model implements PerEsdeveniments {
             try {
                 Thread.sleep(2);
             } catch (InterruptedException ex) {
-                MeuError.informaError(ex);
+                Error.informaError(ex);
             }
         }
         y = (int)(System.currentTimeMillis()- tiempo);
@@ -118,7 +118,7 @@ public class Model implements PerEsdeveniments {
             try {
                 Thread.sleep(2);
             } catch (InterruptedException ex) {
-                MeuError.informaError(ex);
+                Error.informaError(ex);
             }
         }
         y = (int)(System.currentTimeMillis()- tiempo);
@@ -138,7 +138,7 @@ public class Model implements PerEsdeveniments {
                 try {
                     Thread.sleep(2);
                 } catch (InterruptedException ex) {
-                    MeuError.informaError(ex);
+                    Error.informaError(ex);
                 }
             }
         }
@@ -159,7 +159,7 @@ public class Model implements PerEsdeveniments {
                 try {
                     Thread.sleep(2);
                 } catch (InterruptedException ex) {
-                    MeuError.informaError(ex);
+                    Error.informaError(ex);
                 }
             }
         }

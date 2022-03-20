@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mvc_esdeveniments.vista.Vista;
+package Vista;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -12,19 +12,19 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import mvc_esdeveniments.MVC_Esdeveniments;
-import mvc_esdeveniments.MeuError;
+import Principal.Main;
+import Principal.Error;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class Vista extends JFrame implements ActionListener {
 
-    private MVC_Esdeveniments prog;
+    private Main prog;
     private JProgressBar barra;
 
-    public Vista(String s, MVC_Esdeveniments p) {
+    public Vista(String s, Main p) {
         super(s);
         prog = p;
         this.getContentPane().setLayout(new BorderLayout());
@@ -51,7 +51,7 @@ public class Vista extends JFrame implements ActionListener {
         barra.setStringPainted(true);
         //--
         this.add(BorderLayout.NORTH, bots);
-        PanellDibuix panell = new PanellDibuix(800, 400, prog.getModel(), this);
+        PanelDibujo panell = new PanelDibujo(800, 400, prog.getModel(), this);
         
         this.add(BorderLayout.CENTER, panell);
         
@@ -72,7 +72,7 @@ public class Vista extends JFrame implements ActionListener {
         try {
             Thread.sleep(500);
         } catch (Exception e) {
-            MeuError.informaError(e);
+            Error.informaError(e);
         }
         this.revalidate();
         this.repaint();

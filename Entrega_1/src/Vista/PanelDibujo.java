@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mvc_esdeveniments.vista.Vista;
+package Vista;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -13,14 +13,14 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
-import mvc_esdeveniments.MeuError;
-import mvc_esdeveniments.model.Model;
+import Principal.Error;
+import Modelo.Model;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
-public class PanellDibuix extends JPanel {
+public class PanelDibujo extends JPanel {
 
     private int w;
     private int h;
@@ -30,7 +30,7 @@ public class PanellDibuix extends JPanel {
     private final ProcesPintat procpin;
     private BufferedImage bima;
 
-    public PanellDibuix(int x, int y, Model m, Vista v) {
+    public PanelDibujo(int x, int y, Model m, Vista v) {
         w = x;
         h = y;
         mod = m;
@@ -94,9 +94,9 @@ public class PanellDibuix extends JPanel {
 
 class ProcesPintat extends Thread {
 
-    private PanellDibuix pan;
+    private PanelDibujo pan;
 
-    public ProcesPintat(PanellDibuix pd) {
+    public ProcesPintat(PanelDibujo pd) {
         pan = pd;
     }
 
@@ -116,7 +116,7 @@ class ProcesPintat extends Thread {
         try {
             Thread.sleep(t);
         } catch (Exception e) {
-            MeuError.informaError(e);
+            Error.informaError(e);
         }
     }
 }

@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mvc_esdeveniments;
+package Principal;
 
-import mvc_esdeveniments.control.Control;
-import mvc_esdeveniments.model.Model;
-import mvc_esdeveniments.vista.Vista.Vista;
+import Control.Control;
+import Modelo.Model;
+import Vista.Vista;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
-public class MVC_Esdeveniments implements PerEsdeveniments {
+public class Main implements Eventos {
 
-    private Model mod;    // Punter al Model del patró
-    private Vista vis;    // Punter a la Vista del patró
-    private Control con;  // punter al Control del patró
+    private Model mod;    // Puntero al Modelo
+    private Vista vis;    // Puntero a la Vista
+    private Control con;  // puntero al Control
 
     /*
         Construcció de l'esquema MVC
@@ -30,11 +30,11 @@ public class MVC_Esdeveniments implements PerEsdeveniments {
     }
 
     public static void main(String[] args) {
-        (new MVC_Esdeveniments()).inicio();
+        (new Main()).inicio();
     }
 
     /*
-        Funció símple de la comunicació per Patró d'esdeveniments
+        Función símple de la comunicació por eventos
      */
     @Override
     public void notificar(String s) {
@@ -56,7 +56,7 @@ public class MVC_Esdeveniments implements PerEsdeveniments {
     }
 
     /*
-        Mètode public de retorn de la instància del model de dades
+        Método public de retorno de la instancia del modelo de dades
     */
     public Model getModel() {
         return mod;
