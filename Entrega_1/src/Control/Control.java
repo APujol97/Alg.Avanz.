@@ -29,7 +29,7 @@ public class Control extends Thread implements Eventos {
                 prog.getModel().setTipo(1);
                 for (int i = 0; i < iteraciones; i++) {
                     prog.getModel().notificar("O(n)");
-                    espera(1000 / 25, 0);
+                    espera(1000 / 20, 0);
                 }
                 System.out.println("Fin del calculo 0(n) ");
                 prog.getModel().resetVariables();
@@ -38,7 +38,7 @@ public class Control extends Thread implements Eventos {
                 prog.getModel().setTipo(2);
                 for (int i = 0; i < iteraciones; i++) {
                     prog.getModel().notificar("O(logn)");
-                    espera(1000 / 25, 0);
+                    espera(1000 / 20, 0);
                 }
                 prog.getModel().resetVariables();
                 System.out.println("Fin del calculo 0(logn)");
@@ -47,7 +47,7 @@ public class Control extends Thread implements Eventos {
                 prog.getModel().setTipo(3);
                 for (int i = 0; i < iteraciones; i++) {
                     prog.getModel().notificar("O(n2)");
-                    espera(1000 / 25, 0);
+                    espera(1000 / 20, 0);
                 }
                 prog.getModel().resetVariables();
                 System.out.println("Fin del calculo 0(n2)");
@@ -56,7 +56,7 @@ public class Control extends Thread implements Eventos {
                 prog.getModel().setTipo(4);
                 for (int i = 0; i < iteraciones; i++) {
                     prog.getModel().notificar("O(nlogn)");
-                    espera(1000 / 25, 0);
+                    espera(1000 / 20, 0);
                 }
                 prog.getModel().resetVariables();
                 System.out.println("Fin del calculo 0(nlogn)");
