@@ -13,7 +13,7 @@ import Principal.Eventos;
  *
  * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
-public class Model implements Eventos {
+public class Modelo implements Eventos {
 
     private Main prog;
     private int oldX, oldY, x, y;
@@ -22,7 +22,7 @@ public class Model implements Eventos {
     private int tipo=0;
     private int percent;
 
-    public Model(Main p) {
+    public Modelo(Main p) {
         prog = p;
         oldX = oldY = x = y = 0;
         n = 0;

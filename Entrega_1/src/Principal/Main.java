@@ -6,7 +6,7 @@
 package Principal;
 
 import Control.Control;
-import Modelo.Model;
+import Modelo.Modelo;
 import Vista.Vista;
 
 /**
@@ -15,7 +15,7 @@ import Vista.Vista;
  */
 public class Main implements Eventos {
 
-    private Model mod;    // Puntero al Modelo
+    private Modelo mod;    // Puntero al Modelo
     private Vista vis;    // Puntero a la Vista
     private Control con;  // puntero al Control
 
@@ -23,7 +23,7 @@ public class Main implements Eventos {
         Construcció de l'esquema MVC
      */
     private void inicio() {
-        mod = new Model(this);
+        mod = new Modelo(this);
         con = null;
         vis = new Vista("Entrega_1", this);
         vis.mostrar();
@@ -58,7 +58,7 @@ public class Main implements Eventos {
     /*
         Método public de retorno de la instancia del modelo de dades
     */
-    public Model getModel() {
+    public Modelo getModel() {
         return mod;
     }
 }

@@ -14,7 +14,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import Principal.Error;
-import Modelo.Model;
+import Modelo.Modelo;
 
 /**
  *
@@ -24,13 +24,13 @@ public class PanelDibujo extends JPanel {
 
     private int w;
     private int h;
-    private Model mod;
+    private Modelo mod;
     private Vista vis;
     protected final int FPS = 24;  // 24 frames por segundo
     private final ProcesoDibujo procpin;
     private BufferedImage bima;
 
-    public PanelDibujo(int x, int y, Model m, Vista v) {
+    public PanelDibujo(int x, int y, Modelo m, Vista v) {
         w = x;
         h = y;
         mod = m;
