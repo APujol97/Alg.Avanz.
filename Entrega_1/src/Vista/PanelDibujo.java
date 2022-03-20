@@ -53,14 +53,6 @@ public class PanelDibujo extends JPanel {
     public void paint(Graphics gr) {
         Graphics2D aux = (Graphics2D) gr;
         aux.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        if (bima == null) {
-            if (this.getWidth() > 0) {
-                bima = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
-                bima.getGraphics().setColor(Color.white);
-                bima.getGraphics().fillRect(0, 0, bima.getWidth(), bima.getHeight());
-            }
-
-        }
         mod.setPixels((int) getWidth() / 30);
 
         aux.setStroke(new BasicStroke(2.0f));
