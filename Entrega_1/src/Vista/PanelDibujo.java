@@ -26,8 +26,8 @@ public class PanelDibujo extends JPanel {
     private int h;
     private Model mod;
     private Vista vis;
-    protected final int FPS = 24;  // 24 frames per segon
-    private final ProcesPintat procpin;
+    protected final int FPS = 24;  // 24 frames por segundo
+    private final ProcesoDibujo procpin;
     private BufferedImage bima;
 
     public PanelDibujo(int x, int y, Model m, Vista v) {
@@ -39,7 +39,7 @@ public class PanelDibujo extends JPanel {
         this.setPreferredSize(new Dimension(w, h));
         
                 
-        procpin = new ProcesPintat(this);
+        procpin = new ProcesoDibujo(this);
         //el 30 es por las iteraciones, si las iteraciones son fijas pues lo podemos dejar asi pero si las introduce el ususario habria que cambiar
         procpin.start();
     }
@@ -53,16 +53,19 @@ public class PanelDibujo extends JPanel {
     public void paint(Graphics gr) {
         Graphics2D aux = (Graphics2D) gr;
         aux.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        mod.setPixels((int) getWidth() / 30);
+        mod.setPixels((int) (getWidth() - 40) / 31);
 
         aux.setStroke(new BasicStroke(2.0f));
         
         aux.setColor(Color.BLACK);
        
-        aux.drawLine(0, 0, 0, getHeight());
-        aux.drawLine(0, 0, getWidth(), 0);
-        aux.drawLine(getWidth(), 0, getWidth(), getHeight());
-        aux.drawLine(0, getHeight(), getWidth(), getHeight());
+        //Pintado de la gráfica
+        aux.drawLine(20, 20, 20, getHeight() - 20);
+        aux.drawLine(20, getHeight() -20, getWidth() - 20, getHeight() - 20);
+        aux.drawLine(20, 20, 10, 30);
+        aux.drawLine(20, 20, 30, 30);
+        aux.drawLine(getWidth() - 30, getHeight() - 10, getWidth() - 20, getHeight() - 20);
+        aux.drawLine(getWidth() - 30, getHeight() - 30, getWidth() - 20, getHeight() - 20);
 
         switch (mod.getTipo()) {
             case 1:
@@ -79,16 +82,16 @@ public class PanelDibujo extends JPanel {
                 break;
         }
         
-        aux.drawLine(mod.getOldX(), ( getHeight() - mod.getOldY() ), mod.getX(), ( getHeight() - mod.getY() ));
+        aux.drawLine(mod.getOldX() + 20, ( getHeight() - mod.getOldY() - 20), mod.getX() + 20, ( getHeight() - mod.getY() - 20));
         vis.actualizarBarra(mod.getPercent());
     }
 }
 
-class ProcesPintat extends Thread {
+class ProcesoDibujo extends Thread {
 
     private PanelDibujo pan;
 
-    public ProcesPintat(PanelDibujo pd) {
+    public ProcesoDibujo(PanelDibujo pd) {
         pan = pd;
     }
 
