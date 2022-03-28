@@ -30,7 +30,7 @@ public class NPiezas implements Notificar {
                 "Elije la pieza del juego", "");
         gui.ponOpcion("imagenes/elijedim.png", "barra:elije-dim",
                 "Elije la dimensión del tablero", "");
-        gui.ponOpcion("imagenes/cerebro.png", "barra:calcular",
+        gui.ponOpcion("imagenes/play.jpg", "barra:calcular",
                 "Resuelve el problema", "");
         return gui;
     }
