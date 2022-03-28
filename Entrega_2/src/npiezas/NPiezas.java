@@ -57,7 +57,7 @@ public class NPiezas implements Notificar {
             dat.setClasePieza(aux);
             dat.regenerar(dat.getDimension());
             gui.setImagenPieza(dat);
-            gui.repintar();
+            //gui.repintar();
         } else if (s.startsWith("modal:dimension-")) {
             String aux = s.substring(s.indexOf("-") + 1);
             dat = new Datos(Integer.parseInt(aux));
