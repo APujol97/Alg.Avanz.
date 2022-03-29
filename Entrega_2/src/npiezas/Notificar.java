@@ -7,7 +7,7 @@ package npiezas;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public interface Notificar {
     public abstract void notificar(String s);

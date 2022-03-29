@@ -6,7 +6,7 @@ package datos.piezas;
 
 /**
  *
- * @author Joan
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class invent_3 extends Pieza{
     

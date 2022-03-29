@@ -18,7 +18,7 @@ import javax.xml.transform.OutputKeys;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class PanelCentral extends JPanel implements MouseListener {
 

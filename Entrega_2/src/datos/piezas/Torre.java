@@ -7,7 +7,7 @@ package datos.piezas;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class Torre extends Pieza {
 

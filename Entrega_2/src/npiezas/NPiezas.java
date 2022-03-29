@@ -11,7 +11,7 @@ import npiezas.gui.Modal;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class NPiezas implements Notificar {
 

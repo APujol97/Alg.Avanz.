@@ -18,7 +18,7 @@ import npiezas.gui.dialogos.ParaPieza;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class Modal extends JDialog implements ActionListener {
 

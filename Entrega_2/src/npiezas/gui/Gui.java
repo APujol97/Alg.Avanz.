@@ -20,7 +20,7 @@ import npiezas.Notificar;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class Gui implements ActionListener {
 

@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class Juego extends Thread {
 

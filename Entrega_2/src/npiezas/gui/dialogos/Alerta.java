@@ -15,7 +15,7 @@ import npiezas.Notificar;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class Alerta extends JPanel {
     private Notificar prog;

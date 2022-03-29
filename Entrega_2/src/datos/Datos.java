@@ -11,7 +11,7 @@ import java.net.URL;
 
 /**
  *
- * @author mascport
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class Datos {
 
@@ -95,7 +95,7 @@ public class Datos {
         String paquete = pack.getName(); // Ya tenemos el package de los datos
         paquete = paquete + ".piezas";
         URL path = getClass().getResource("/" + paquete.replaceAll("\\.", "/"));
-        File dir = new File(path.getPath());System.out.println(dir);
+        File dir = new File(path.getPath());
         String[] nombres = dir.list();
         String[] aux = new String[nombres.length - 1];
         int pos = 0;
