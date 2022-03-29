@@ -47,6 +47,29 @@ public class PanelCentral extends JPanel implements MouseListener {
 
     @Override
     public void paint(Graphics g) {
+        tablero(g);
+        int dim = dat.getDimension();
+        //calculamos el ancho y alto de la casilla
+        int ancho = this.getWidth() / dim;
+        int alto = this.getHeight() / dim;
+        //colocamos las piezas
+        if (dat.getSolucion() != null) {
+            for (int i = 0; i < dim; i++) {
+                for (int j = 0; j < dim; j++) {
+                    if (i == dat.getxIni() && j == dat.getyIni()) {
+                        g.drawImage(imgpieza.getImage(), i * ancho, j * alto, ancho, alto, this);
+                    } else {
+                        texto = "" + dat.getValorSolucion(i, j);
+                        g.setColor(Color.ORANGE);
+                        g.setFont(new Font("Tahoma", Font.BOLD, 40));
+                        g.drawString(texto, (i) * ancho, (j + 1) * alto);
+                    }
+                }
+            }
+        }
+    }
+
+    public void tablero(Graphics g){
         g.setColor(new Color(255, 255, 255));
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         int dim = dat.getDimension();
@@ -69,23 +92,8 @@ public class PanelCentral extends JPanel implements MouseListener {
                 }
             }
         }
-        //colocamos las piezas
-        if (dat.getSolucion() != null) {
-            for (int i = 0; i < dim; i++) {
-                for (int j = 0; j < dim; j++) {
-                    if (i == dat.getxIni() && j == dat.getyIni()) {
-                        g.drawImage(imgpieza.getImage(), i * ancho, j * alto, ancho, alto, this);
-                    } else {
-                        texto = "" + dat.getValorSolucion(i, j);
-                        g.setColor(Color.ORANGE);
-                        g.setFont(new Font("Tahoma", Font.BOLD, 40));
-                        g.drawString(texto, (i) * ancho, (j + 1) * alto);
-                    }
-                }
-            }
-        }
     }
-
+    
     public void setDatos(Datos d) {
         dat = d;
     }
@@ -109,6 +117,7 @@ public class PanelCentral extends JPanel implements MouseListener {
         dat.setxIni(x);
         dat.setyIni(y);
         //Esto se puede retocar
+        tablero(this.getGraphics());
         this.getGraphics().drawImage(imgpieza.getImage(),  x * (width),y * (height), (width), (height), this);
     }
 

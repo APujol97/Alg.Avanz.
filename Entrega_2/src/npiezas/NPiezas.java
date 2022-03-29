@@ -25,12 +25,12 @@ public class NPiezas implements Notificar {
     }
 
     private Gui construirInterfaz() {
-        Gui gui = new Gui("Colocar las N piezas", 600, 600, dat, this);
+        Gui gui = new Gui("Recorrido de una pieza por un tablero de NxN", 600, 600, dat, this);
         gui.ponOpcion("imagenes/elijepieza.png", "barra:elije-pieza",
                 "Elije la pieza del juego", "");
         gui.ponOpcion("imagenes/elijedim.png", "barra:elije-dim",
                 "Elije la dimensión del tablero", "");
-        gui.ponOpcion("imagenes/cerebro.png", "barra:calcular",
+        gui.ponOpcion("imagenes/play.jpg", "barra:calcular",
                 "Resuelve el problema", "");
         return gui;
     }
@@ -57,7 +57,7 @@ public class NPiezas implements Notificar {
             dat.setClasePieza(aux);
             dat.regenerar(dat.getDimension());
             gui.setImagenPieza(dat);
-            gui.repintar();
+            //gui.repintar();
         } else if (s.startsWith("modal:dimension-")) {
             String aux = s.substring(s.indexOf("-") + 1);
             dat = new Datos(Integer.parseInt(aux));

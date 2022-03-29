@@ -26,21 +26,21 @@ public class Reina extends Pieza {
         movx = new int[8];
         movy = new int[8];
         int pos = 0;
-        movx[pos] = 0; // vertical
-        movy[pos++] = 1; //vertical
-        movx[pos] = 0; // vertical
-        movy[pos++] = -1; //vertical
-        movx[pos] = 1; // horizontal
-        movy[pos++] = 0; //horizontal
-        movx[pos] = -1; // horizontal
-        movy[pos++] = 0; //horizontal
-        movx[pos] = 1; //   oblicuo 1
-        movy[pos++] = 1; //    oblicuo1
-        movx[pos] = -1; //   oblicuo 1
-        movy[pos++] = -1; //    oblicuo1
-        movx[pos] = -1; //   oblicuo 2
-        movy[pos++] = 1; //    oblicuo2
-        movx[pos] = 1; //   oblicuo 2
-        movy[pos++] = -1; //    oblicuo2
+        movx[pos] = 0;
+        movy[pos++] = -1;
+        movx[pos] = 1;
+        movy[pos++] = -1;
+        movx[pos] = 1;
+        movy[pos++] = 0;
+        movx[pos] = 1;
+        movy[pos++] = 1;
+        movx[pos] = 0;
+        movy[pos++] = 1;
+        movx[pos] = -1;
+        movy[pos++] = 1;
+        movx[pos] = -1;
+        movy[pos++] = 0;
+        movx[pos] = -1;
+        movy[pos++] = -1;
     }
 }
