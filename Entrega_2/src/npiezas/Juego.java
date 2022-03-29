@@ -47,24 +47,27 @@ public class Juego extends Thread {
     }
 
     private void ponerPieza(int n, int x, int y) {
-
+        
         if (n == dat.getDimension() * dat.getDimension()) {
             prog.notificar("repintar");
             soluciones++;
 
             continuar = false;
-        }
+        }      
+        
         for (int i = 0; i < dat.getNumMovs() && continuar; i++) {
-            int sh = x + dat.getMovX(i);
-            int sv = y + dat.getMovY(i);
-            if (sh >= 0 && sv >= 0) {
-                if (sh < dat.getDimension() && sv < dat.getDimension()) {
-                    if (!dat.hayPieza(sh, sv)) {
-                        dat.setValorSolucion(sh, sv, n + 1);
-                        dat.ponPieza(sh, sv);
-                        ponerPieza(n + 1, sh, sv);
-                        dat.quitaPieza(sh, sv);
-                        dat.setValorSolucion(sh, sv, -1);
+            int newX = x + dat.getMovX(i);
+            int newY = y + dat.getMovY(i);
+            
+            if (newX >= 0 && newY >= 0) {
+                if (newX < dat.getDimension() && newY < dat.getDimension()) {
+                    if (!dat.hayPieza(newX, newY))
+                    {
+                        dat.setValorSolucion(newX, newY, n + 1);
+                        dat.ponPieza(newX, newY);
+                        ponerPieza(n + 1, newX, newY);
+                        dat.quitaPieza(newX, newY);
+                        dat.setValorSolucion(newX, newY, -1);
                     }
                 }
             }
