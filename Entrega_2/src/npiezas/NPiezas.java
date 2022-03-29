@@ -25,7 +25,7 @@ public class NPiezas implements Notificar {
     }
 
     private Gui construirInterfaz() {
-        Gui gui = new Gui("Colocar las N piezas", 600, 600, dat, this);
+        Gui gui = new Gui("Recorrido de una pieza por un tablero de NxN", 600, 600, dat, this);
         gui.ponOpcion("imagenes/elijepieza.png", "barra:elije-pieza",
                 "Elije la pieza del juego", "");
         gui.ponOpcion("imagenes/elijedim.png", "barra:elije-dim",
