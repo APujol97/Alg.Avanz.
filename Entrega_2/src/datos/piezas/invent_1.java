@@ -16,17 +16,20 @@ public class invent_1 extends Pieza {
         movx = new int[6];
         movy = new int[6];
         int pos = 0;
-        movx[pos] = -1; 
-        movy[pos++] = -1;            
         movx[pos] = 0; 
         movy[pos++] = -1;            
         movx[pos] = 1; 
-        movy[pos++] = -1;            
-        movx[pos] = -1; 
-        movy[pos++] = 1;   
-        movx[pos] = 0; 
-        movy[pos++] = 1;            
+        movy[pos++] = -1;
         movx[pos] = 1; 
         movy[pos++] = 1;
+        movx[pos] = 0; 
+        movy[pos++] = 1;
+        movx[pos] = -1; 
+        movy[pos++] = 1;   
+        movx[pos] = -1; 
+        movy[pos++] = -1;  
+        
+        
+        
     }
 }

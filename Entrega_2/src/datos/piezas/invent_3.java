@@ -16,13 +16,13 @@ public class invent_3 extends Pieza{
         movx = new int[5];
         movy = new int[5];
         int pos = 0;
-        movx[pos] = -1; 
-        movy[pos++] = -1;            
         movx[pos] = 0; 
         movy[pos++] = -1;            
         movx[pos] = 1; 
         movy[pos++] = 0;            
         movx[pos] = 0; 
+        movy[pos++] = 1;            
+        movx[pos] = -1; 
         movy[pos++] = 1;        
         movx[pos] = -1; 
         movy[pos++] = -1;
