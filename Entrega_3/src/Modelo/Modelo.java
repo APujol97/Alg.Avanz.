@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pruebaaa;
+package Modelo;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,89 +16,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class PruebaAA {
-
-    static int numeroCorte = 2;
-    static int numeroPruebas = 1000;
-    static double constante = 0;
-
-    public static void main(String[] args) throws IOException {
-
-        String numero1 = "";
-        String numero2 = "";
-        int opcion = 1;
-        long tiempo;
-
-        ArrayList<Integer> num1 = new ArrayList<>();
-        ArrayList<Integer> num2 = new ArrayList<>();
-        ArrayList<Integer> ejemplo;
-        ArrayList<Integer> ejemplo1;
-        ArrayList<Integer> ejemplo2;
-
-        LT leer = new LT();
-        Random ran = new Random();
+/**
+ *
+ * @author pujol
+ */
+public class Modelo {
+    int numeroCorte = 2;
+    int numeroPruebas = 1000;
+    double constante = 0;
+    
+    public Modelo(){
         
-        if (opcion == 0) {
-            System.out.println("Introduzca el primer numero : ");
-            numero1 = leer.lecturaLinea();
-            System.out.println("Introduzca el segundo numero : ");
-            numero2 = leer.lecturaLinea();
-
-            for (int i = 0; i < numero1.length() - 1; i++) {
-                num1.add((int) numero1.charAt(i) - 48);
-            }
-            for (int i = 0; i < numero2.length() - 1; i++) {
-                num2.add((int) numero2.charAt(i) - 48);
-            }
-        } else {
-            for (int i = 0; i < 10550; i++) {
-                numero1 = numero1 + String.valueOf(ran.nextInt(9));
-            }
-            for (int i = 0; i < 10550; i++) {
-                numero2 = numero2 + String.valueOf(ran.nextInt(9));
-            }
-            num1 = toArrayList(numero1);
-            num2 = toArrayList(numero2);
-        }
-
-        Collections.reverse(num1);
-        Collections.reverse(num2);
-
-        System.out.println("------------------------------------");
-
-        tiempo = System.currentTimeMillis();
-        ejemplo = multiplicaionNormal(num1, num2);
-        tiempo = System.currentTimeMillis() - tiempo;
-        Collections.reverse(ejemplo);
-        System.out.println("Resultado de la multiplicaion normal");
-        System.out.println("->" + ejemplo.toString().replace(", ", ""));
-        System.out.println("Tiempo en ms " + tiempo);
-
-        tiempo = System.currentTimeMillis();
-        ejemplo1 = karatsuba(num1, num2);
-        tiempo = System.currentTimeMillis() - tiempo;
-        Collections.reverse(ejemplo1);
-        System.out.println("Resultado de la multiplicaion de Karatsuba");
-        System.out.println("->" + ejemplo1.toString().replace(", ", ""));
-        System.out.println("Tiempo en ms " + tiempo);
-
-//        ejemplo2 = resta(ejemplo, ejemplo1);
-//        Collections.reverse(ejemplo2);
-//        System.out.println("Resta para comprobar que las dos operaciones dan el mismo resultado");
-//        System.out.println("Solucion ->" + ejemplo2.toString().replace(", ", ""));
-
-        tiempo = System.currentTimeMillis();
-        ejemplo = funcionMitxa(num1, num2);
-        tiempo = System.currentTimeMillis() - tiempo;
-        Collections.reverse(ejemplo);
-        System.out.println("Resultado del algoritmo mitxo");
-        System.out.println("->" + ejemplo.toString().replace(", ", ""));
-        System.out.println("Tiempo en ms " + tiempo);
-        
-        System.out.println("------------------------------------");
     }
-
-    public static ArrayList<Integer> toArrayList(String num) {
+    
+    public ArrayList<Integer> toArrayList(String num) {
         String[] numero = num.split("");
         ArrayList<Integer> res = new ArrayList<>();
         for (int i = numero.length - 1; i >= 0; i--) {
@@ -108,7 +39,7 @@ public class PruebaAA {
         return res;
     }
 
-    private static ArrayList<Integer> multiplicaionNormal(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
+    private ArrayList<Integer> multiplicaionNormal(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
 
         int acarreo = 0;
         int indice = -1;
@@ -185,7 +116,7 @@ public class PruebaAA {
         return solucion;
     }
 
-    private static ArrayList<Integer> karatsuba(ArrayList<Integer> i, ArrayList<Integer> j) {
+    private ArrayList<Integer> karatsuba(ArrayList<Integer> i, ArrayList<Integer> j) {
 
         ArrayList<Integer> auxiliar;
         ArrayList<Integer> a;
@@ -261,7 +192,7 @@ public class PruebaAA {
 
     }
 
-    private static ArrayList<Integer> multiplicaion(ArrayList<Integer> i, int j) {//No hace mulyiplicar array ya que nunca se hace, solo multiplicac por 10 elevado a algo, que es lo mismo qie poner ceros en el array 
+    private ArrayList<Integer> multiplicaion(ArrayList<Integer> i, int j) {//No hace mulyiplicar array ya que nunca se hace, solo multiplicac por 10 elevado a algo, que es lo mismo qie poner ceros en el array 
         boolean aux = false;
         if (i.get(i.size() - 1) == -1) {//Miramos si el primer numero es negativo y le quitamos el signo
             //i.remove(0);
@@ -279,7 +210,7 @@ public class PruebaAA {
         return i;
     }
 
-    private static ArrayList<Integer> suma(ArrayList<Integer> i, ArrayList<Integer> j) {//Suma de dos numeros en un array
+    private ArrayList<Integer> suma(ArrayList<Integer> i, ArrayList<Integer> j) {//Suma de dos numeros en un array
 
         boolean auxiliar2;
         boolean cambio = false;
@@ -340,7 +271,7 @@ public class PruebaAA {
         return solucion;
     }
 
-    private static ArrayList<Integer> resta(ArrayList<Integer> i, ArrayList<Integer> j) {
+    private ArrayList<Integer> resta(ArrayList<Integer> i, ArrayList<Integer> j) {
 
         boolean cambio = false;
 
@@ -431,7 +362,7 @@ public class PruebaAA {
         return solucion;
     }
 
-    private static ArrayList<Integer> OperacionResta(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
+    private ArrayList<Integer> OperacionResta(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
 
         int auxiliar3;
         int acarreo = 0;
@@ -465,7 +396,7 @@ public class PruebaAA {
         return solucion;
     }
 
-    private static ArrayList<Integer> OperacionSuma(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
+    private ArrayList<Integer> OperacionSuma(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
         int auxiliar3;
         int acarreo = 0;
         ArrayList<Integer> solucion = new ArrayList<>();
@@ -496,7 +427,7 @@ public class PruebaAA {
         return solucion;
     }
 
-    private static ArrayList<Integer> MultiplicacionPequeñaKaratsuba(ArrayList<Integer> i, ArrayList<Integer> j) {
+    private ArrayList<Integer> MultiplicacionPequeñaKaratsuba(ArrayList<Integer> i, ArrayList<Integer> j) {
 
         ArrayList<Integer> solucion = new ArrayList<>();
         ArrayList<Integer> numero1;
@@ -529,7 +460,7 @@ public class PruebaAA {
         return solucion;
     }
 
-    private static ArrayList<Integer> funcionMitxa(ArrayList<Integer> i, ArrayList<Integer> j) throws FileNotFoundException, IOException {
+    private ArrayList<Integer> funcionMitxa(ArrayList<Integer> i, ArrayList<Integer> j) throws FileNotFoundException, IOException {
         File archivo = new File("PuntoCorte.txt");
 
         if (!archivo.exists()) {
@@ -537,7 +468,7 @@ public class PruebaAA {
             FileWriter fw = new FileWriter(archivo);
             BufferedWriter bw = new BufferedWriter(fw);
             calculoCorte();
-            bw.write(numeroCorte);
+            bw.write(Integer.toString(numeroCorte));
 
             bw.close();
             fw.close();
@@ -546,7 +477,7 @@ public class PruebaAA {
             
             FileReader fr = new FileReader(archivo);
             BufferedReader br = new BufferedReader(fr);
-            numeroCorte = br.read();
+            numeroCorte = Integer.parseInt(br.readLine());
             br.close();
             fr.close();
             
@@ -554,7 +485,7 @@ public class PruebaAA {
         return AlgoritmoMitxo(i, j);
     }
 
-    private static ArrayList<Integer> AlgoritmoMitxo(ArrayList<Integer> i, ArrayList<Integer> j) {
+    private ArrayList<Integer> AlgoritmoMitxo(ArrayList<Integer> i, ArrayList<Integer> j) {
         ArrayList<Integer> auxiliar;
         ArrayList<Integer> a;
         ArrayList<Integer> b;
@@ -587,9 +518,9 @@ public class PruebaAA {
 
         c = new ArrayList<>(j.subList(n, j.size()));
 
-        primero = karatsuba(a, c);
-        segundo = karatsuba(b, d);
-        tercero = karatsuba(suma(a, b), suma(c, d));
+        primero = AlgoritmoMitxo(a, c);
+        segundo = AlgoritmoMitxo(b, d);
+        tercero = AlgoritmoMitxo(suma(a, b), suma(c, d));
 
 //        System.out.println("--------------");
 //        System.out.println("Parametro 1:" + i + "Parametro 2:" + j);
@@ -629,7 +560,7 @@ public class PruebaAA {
 
     }
 
-    private static void calculoCorte() {
+    private void calculoCorte() {
 
         long tiempo;
         double mediaKaratusba = 0, constanteKaratsuba = 0;
@@ -676,7 +607,7 @@ public class PruebaAA {
         numeroCorte = (int) bolzano(1, 1000000000);
     }
 
-    private static double bolzano(double a, double b) {
+    private double bolzano(double a, double b) {
         double m = (a + b) / 2;
         double vm = funcio(m);
         double vb = funcio(b);
@@ -691,7 +622,7 @@ public class PruebaAA {
         }
     }
 
-    private static double funcio(double n) {
+    private double funcio(double n) {
         double res;
         res = (Math.pow(n, 2) / Math.pow(n, ((Math.log(3.0) / Math.log(2.0))))) - constante;
         return res;

@@ -2,7 +2,7 @@
 FUNCIONALIDAD: funcionalidades para llevar a cabo la lectura de datos desde 
 el teclado
  ***************************************************************************/
-package pruebaaa;
+package Modelo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
