@@ -5,6 +5,9 @@
  */
 package Modelo;
 
+import Principal.Main;
+import Principal.Error;
+import Principal.Eventos;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,31 +18,108 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author pujol
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
-public class Modelo {
-    int numeroCorte = 2;
-    int numeroPruebas = 1000;
-    double constante = 0;
+public class Modelo implements Eventos {
+
+    private Main prog;
+    private ArrayList<Integer> num1 = new ArrayList<>();
+    private ArrayList<Integer> num2 = new ArrayList<>();
     
-    public Modelo(){
+    private int numeroCorte = 2;
+    private int numeroPruebas = 1000;
+    private double constante = 0;
+
+    public Modelo(Main p) {
+        prog = p;
+    }
+
+    public void setNums() {
+        String aux1 = this.prog.getView().getNum1();
+        String aux2 = this.prog.getView().getNum2();
         
+        this.num1.clear();
+        this.num2.clear();
+        
+        for (int i = 0; i < aux1.length(); i++) {
+            this.num1.add((int) aux1.charAt(i) - 48);
+        }
+        for (int i = 0; i < aux2.length(); i++) {
+            this.num2.add((int) aux2.charAt(i) - 48);
+        }
+        
+        Collections.reverse(this.num1);
+        Collections.reverse(this.num2);
+    }  
+    
+    public void runKaratsuba() {
+        ArrayList<Integer> resultado = karatsuba(this.num1, this.num2);
+        Collections.reverse(resultado);
+        this.prog.getView().añadirTexto(resultado.toString().replace(", ", ""));
     }
     
-    public ArrayList<Integer> toArrayList(String num) {
-        String[] numero = num.split("");
-        ArrayList<Integer> res = new ArrayList<>();
-        for (int i = numero.length - 1; i >= 0; i--) {
-
-            res.add(Integer.parseInt(numero[i]));
-        }
-        return res;
+     public void runNormal() {
+        ArrayList<Integer> resultado = multiplicacionNormal(this.num1, this.num2);
+        Collections.reverse(resultado);
+        this.prog.getView().añadirTexto(resultado.toString().replace(", ", ""));
     }
+     
+      public void runMixto() throws IOException {
+        ArrayList<Integer> resultado = funcionMitxa(this.num1, this.num2);
+        Collections.reverse(resultado);
+        this.prog.getView().añadirTexto(resultado.toString().replace(", ", ""));
+    }
+    
+    public ArrayList<Integer> karatsuba(ArrayList<Integer> i, ArrayList<Integer> j) {
 
-    private ArrayList<Integer> multiplicaionNormal(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
+        ArrayList<Integer> auxiliar;
+        ArrayList<Integer> a;
+        ArrayList<Integer> b;
+        ArrayList<Integer> c;
+        ArrayList<Integer> d;
+
+        ArrayList<Integer> primero;
+        ArrayList<Integer> segundo;
+        ArrayList<Integer> tercero;
+
+        ArrayList<Integer> particion1;
+        ArrayList<Integer> particion2;
+
+        int n;
+
+        if (i.size() < 2 || j.size() < 2) {
+            auxiliar = MultiplicacionPequeñaKaratsuba(i, j);
+            return auxiliar;
+        }
+
+        n = Math.min(i.size(), j.size());
+        n = (int) Math.floor(n / 2);
+
+        b = new ArrayList<>(i.subList(0, n));
+
+        d = new ArrayList<>(j.subList(0, n));
+
+        a = new ArrayList<>(i.subList(n, i.size()));
+
+        c = new ArrayList<>(j.subList(n, j.size()));
+
+        primero = karatsuba(a, c);
+        segundo = karatsuba(b, d);
+        tercero = karatsuba(suma(a, b), suma(c, d));
+        
+        particion1 = suma(multiplicaion(resta(resta(tercero, primero), segundo), n), segundo);
+
+        particion2 = multiplicaion(primero, n * 2);
+
+        return suma(particion2, particion1);
+    }
+    
+    public ArrayList<Integer> multiplicacionNormal(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
 
         int acarreo = 0;
         int indice = -1;
@@ -115,101 +195,67 @@ public class Modelo {
         }
         return solucion;
     }
+    
+    public ArrayList<Integer> funcionMitxa(ArrayList<Integer> i, ArrayList<Integer> j) throws FileNotFoundException, IOException {
+        File archivo = new File("PuntoCorte.txt");
 
-    private ArrayList<Integer> karatsuba(ArrayList<Integer> i, ArrayList<Integer> j) {
+        if (!archivo.exists()) {
 
-        ArrayList<Integer> auxiliar;
-        ArrayList<Integer> a;
-        ArrayList<Integer> b;
-        ArrayList<Integer> c;
-        ArrayList<Integer> d;
+            FileWriter fw = new FileWriter(archivo);
+            BufferedWriter bw = new BufferedWriter(fw);
+            calculoCorte();
+            bw.write(numeroCorte);
 
-        ArrayList<Integer> primero;
-        ArrayList<Integer> segundo;
-        ArrayList<Integer> tercero;
-
-        ArrayList<Integer> particion1;
-        ArrayList<Integer> particion2;
-        LT leer = new LT();
-
-        int n;
-
-        if (i.size() < 2 || j.size() < 2) {
-            auxiliar = MultiplicacionPequeñaKaratsuba(i, j);
-            return auxiliar;
+            bw.close();
+            fw.close();
+            
+        } else {
+            
+            FileReader fr = new FileReader(archivo);
+            BufferedReader br = new BufferedReader(fr);
+            numeroCorte = br.read();
+            br.close();
+            fr.close();
+            
         }
-
-        n = Math.min(i.size(), j.size());
-        n = (int) Math.floor(n / 2);
-
-        b = new ArrayList<>(i.subList(0, n));
-
-        d = new ArrayList<>(j.subList(0, n));
-
-        a = new ArrayList<>(i.subList(n, i.size()));
-
-        c = new ArrayList<>(j.subList(n, j.size()));
-
-        primero = karatsuba(a, c);
-        segundo = karatsuba(b, d);
-        tercero = karatsuba(suma(a, b), suma(c, d));
-
-//        System.out.println("--------------");
-//        System.out.println("Parametro 1:" + i + "Parametro 2:" + j);
-//
-//        System.out.println("ALTO 1:" + a.toString());
-//        System.out.println("BAJO 1:" + b.toString());
-//        System.out.println("ALTO 2:" + c.toString());
-//        System.out.println("BAJO 2:" + d.toString());
-//
-//        System.out.println("PRIMERO:" + primero);
-//        System.out.println("SEGUNDO:" + segundo);
-//        System.out.println("TERCERO:" + tercero);
-//
-//        System.out.println("resta(tercero, primero)");
-//        particion1 = resta(tercero, primero);
-//        System.out.println(particion1.toString());
-//
-//        System.out.println("resta(resta(tercero, primero), segundo)");
-//        particion1 = resta(resta(tercero, primero), segundo);
-//        System.out.println(particion1.toString());
-//
-//        System.out.println("multiplicaion(resta(resta(tercero, primero), segundo), (int) Math.pow(10, n))---" + (int) Math.pow(10, n));
-//        particion1 = multiplicaion(resta(resta(tercero, primero), segundo), (int) Math.pow(10, n));
-//        System.out.println(particion1.toString());
-//
-//        System.out.println("suma(multiplicaion(resta(resta(tercero, primero), segundo), (int) Math.pow(10, n)), segundo)---" + (int) Math.pow(10, n));
-        particion1 = suma(multiplicaion(resta(resta(tercero, primero), segundo), n), segundo);
-//        System.out.println("Ejemplo=" + particion1.toString());
-//
-//        System.out.println("multiplicaion(primero, (int) Math.pow(10, n * 2))---" + (int) Math.pow(10, n * 2));
-        particion2 = multiplicaion(primero, n * 2);
-//        System.out.println("Ejemplo1=" + particion2.toString());
-//
-//        System.out.println("--------------");
-        // leer.lecturaCaracter();
-        return suma(particion2, particion1);
-
+        return AlgoritmoMitxo(i, j);
     }
+    
+    /**************************************************************************/
+    
+    private ArrayList<Integer> MultiplicacionPequeñaKaratsuba(ArrayList<Integer> i, ArrayList<Integer> j) {
 
-    private ArrayList<Integer> multiplicaion(ArrayList<Integer> i, int j) {//No hace mulyiplicar array ya que nunca se hace, solo multiplicac por 10 elevado a algo, que es lo mismo qie poner ceros en el array 
-        boolean aux = false;
-        if (i.get(i.size() - 1) == -1) {//Miramos si el primer numero es negativo y le quitamos el signo
-            //i.remove(0);
-            i = new ArrayList<>(i.subList(0, i.size() - 1));
-            aux = true;
+        ArrayList<Integer> solucion = new ArrayList<>();
+        ArrayList<Integer> numero1;
+        ArrayList<Integer> numero2;
+        int acarreo = 0;
+        int auxiliar3 = 0;
+
+        if (i.size() < j.size()) {//Aqui lo que hago es ver que elemento es mas grande, por si acaso pq no se si se puede dar este caso, para que el algoritmo sea el mismo
+            numero1 = new ArrayList<>(j);
+            numero2 = new ArrayList<>(i);
+
+        } else {
+            numero1 = new ArrayList<>(i);
+            numero2 = new ArrayList<>(j);
         }
-        Collections.reverse(i);//Esto es porque cuando haces el add con 2 parametros es mas cosatoso el add con 1 parametro
-        for (int k = 0; k < j; k++) {
-            i.add(0);
+
+        for (int x = 0; x < numero1.size(); x++) {
+            auxiliar3 = numero1.get(x) * numero2.get(0) + acarreo;
+            acarreo = (int) auxiliar3 / 10;
+            solucion.add(auxiliar3 % 10);
         }
-        Collections.reverse(i);
-        if (aux) {
-            i.add(-1);
+        if (acarreo != 0) {
+            solucion.add(acarreo);
+            acarreo = 0;
         }
-        return i;
+        while (solucion.get(solucion.size() - 1) == 0 && solucion.size() != 1) {
+            //solucion.remove(solucion.size() - 1);
+            solucion = new ArrayList<>(solucion.subList(0, solucion.size() - 1));
+        }
+        return solucion;
     }
-
+    
     private ArrayList<Integer> suma(ArrayList<Integer> i, ArrayList<Integer> j) {//Suma de dos numeros en un array
 
         boolean auxiliar2;
@@ -361,7 +407,7 @@ public class Modelo {
 
         return solucion;
     }
-
+    
     private ArrayList<Integer> OperacionResta(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
 
         int auxiliar3;
@@ -426,66 +472,26 @@ public class Modelo {
         }
         return solucion;
     }
-
-    private ArrayList<Integer> MultiplicacionPequeñaKaratsuba(ArrayList<Integer> i, ArrayList<Integer> j) {
-
-        ArrayList<Integer> solucion = new ArrayList<>();
-        ArrayList<Integer> numero1;
-        ArrayList<Integer> numero2;
-        int acarreo = 0;
-        int auxiliar3 = 0;
-
-        if (i.size() < j.size()) {//Aqui lo que hago es ver que elemento es mas grande, por si acaso pq no se si se puede dar este caso, para que el algoritmo sea el mismo
-            numero1 = new ArrayList<>(j);
-            numero2 = new ArrayList<>(i);
-
-        } else {
-            numero1 = new ArrayList<>(i);
-            numero2 = new ArrayList<>(j);
+    
+    private ArrayList<Integer> multiplicaion(ArrayList<Integer> i, int j) {//No hace mulyiplicar array ya que nunca se hace, solo multiplicac por 10 elevado a algo, que es lo mismo qie poner ceros en el array 
+        boolean aux = false;
+        if (i.get(i.size() - 1) == -1) {//Miramos si el primer numero es negativo y le quitamos el signo
+            //i.remove(0);
+            i = new ArrayList<>(i.subList(0, i.size() - 1));
+            aux = true;
         }
-
-        for (int x = 0; x < numero1.size(); x++) {
-            auxiliar3 = numero1.get(x) * numero2.get(0) + acarreo;
-            acarreo = (int) auxiliar3 / 10;
-            solucion.add(auxiliar3 % 10);
+        Collections.reverse(i);//Esto es porque cuando haces el add con 2 parametros es mas cosatoso el add con 1 parametro
+        for (int k = 0; k < j; k++) {
+            i.add(0);
         }
-        if (acarreo != 0) {
-            solucion.add(acarreo);
-            acarreo = 0;
+        Collections.reverse(i);
+        if (aux) {
+            i.add(-1);
         }
-        while (solucion.get(solucion.size() - 1) == 0 && solucion.size() != 1) {
-            //solucion.remove(solucion.size() - 1);
-            solucion = new ArrayList<>(solucion.subList(0, solucion.size() - 1));
-        }
-        return solucion;
+        return i;
     }
-
-    private ArrayList<Integer> funcionMitxa(ArrayList<Integer> i, ArrayList<Integer> j) throws FileNotFoundException, IOException {
-        File archivo = new File("PuntoCorte.txt");
-
-        if (!archivo.exists()) {
-
-            FileWriter fw = new FileWriter(archivo);
-            BufferedWriter bw = new BufferedWriter(fw);
-            calculoCorte();
-            bw.write(Integer.toString(numeroCorte));
-
-            bw.close();
-            fw.close();
-            
-        } else {
-            
-            FileReader fr = new FileReader(archivo);
-            BufferedReader br = new BufferedReader(fr);
-            numeroCorte = Integer.parseInt(br.readLine());
-            br.close();
-            fr.close();
-            
-        }
-        return AlgoritmoMitxo(i, j);
-    }
-
-    private ArrayList<Integer> AlgoritmoMitxo(ArrayList<Integer> i, ArrayList<Integer> j) {
+    
+    public ArrayList<Integer> AlgoritmoMitxo(ArrayList<Integer> i, ArrayList<Integer> j) {
         ArrayList<Integer> auxiliar;
         ArrayList<Integer> a;
         ArrayList<Integer> b;
@@ -498,12 +504,11 @@ public class Modelo {
 
         ArrayList<Integer> particion1;
         ArrayList<Integer> particion2;
-        LT leer = new LT();
 
         int n;
 
         if (i.size() < numeroCorte || j.size() < numeroCorte) {
-            auxiliar = multiplicaionNormal(i, j);
+            auxiliar = multiplicacionNormal(i, j);
             return auxiliar;
         }
 
@@ -518,49 +523,28 @@ public class Modelo {
 
         c = new ArrayList<>(j.subList(n, j.size()));
 
-        primero = AlgoritmoMitxo(a, c);
-        segundo = AlgoritmoMitxo(b, d);
-        tercero = AlgoritmoMitxo(suma(a, b), suma(c, d));
+        primero = karatsuba(a, c);
+        segundo = karatsuba(b, d);
+        tercero = karatsuba(suma(a, b), suma(c, d));
 
-//        System.out.println("--------------");
-//        System.out.println("Parametro 1:" + i + "Parametro 2:" + j);
-//
-//        System.out.println("ALTO 1:" + a.toString());
-//        System.out.println("BAJO 1:" + b.toString());
-//        System.out.println("ALTO 2:" + c.toString());
-//        System.out.println("BAJO 2:" + d.toString());
-//
-//        System.out.println("PRIMERO:" + primero);
-//        System.out.println("SEGUNDO:" + segundo);
-//        System.out.println("TERCERO:" + tercero);
-//
-//        System.out.println("resta(tercero, primero)");
-//        particion1 = resta(tercero, primero);
-//        System.out.println(particion1.toString());
-//
-//        System.out.println("resta(resta(tercero, primero), segundo)");
-//        particion1 = resta(resta(tercero, primero), segundo);
-//        System.out.println(particion1.toString());
-//
-//        System.out.println("multiplicaion(resta(resta(tercero, primero), segundo), (int) Math.pow(10, n))---" + (int) Math.pow(10, n));
-//        particion1 = multiplicaion(resta(resta(tercero, primero), segundo), (int) Math.pow(10, n));
-//        System.out.println(particion1.toString());
-//
-//        System.out.println("suma(multiplicaion(resta(resta(tercero, primero), segundo), (int) Math.pow(10, n)), segundo)---" + (int) Math.pow(10, n));
         particion1 = suma(multiplicaion(resta(resta(tercero, primero), segundo), n), segundo);
-//        System.out.println("Ejemplo=" + particion1.toString());
-//
-//        System.out.println("multiplicaion(primero, (int) Math.pow(10, n * 2))---" + (int) Math.pow(10, n * 2));
+
         particion2 = multiplicaion(primero, n * 2);
-//        System.out.println("Ejemplo1=" + particion2.toString());
-//
-//        System.out.println("--------------");
-        // leer.lecturaCaracter();
+
         return suma(particion2, particion1);
-
     }
+    
+    public ArrayList<Integer> toArrayList(String num) {
+        String[] numero = num.split("");
+        ArrayList<Integer> res = new ArrayList<>();
+        for (int i = numero.length - 1; i >= 0; i--) {
 
-    private void calculoCorte() {
+            res.add(Integer.parseInt(numero[i]));
+        }
+        return res;
+    }
+    
+    public void calculoCorte() {
 
         long tiempo;
         double mediaKaratusba = 0, constanteKaratsuba = 0;
@@ -592,7 +576,7 @@ public class Modelo {
 
         for (int k = 0; k < 5; k++) {
             tiempo = System.currentTimeMillis();
-            multiplicaionNormal(num1, num2);
+            multiplicacionNormal(num1, num2);
             tiempo = System.currentTimeMillis() - tiempo;
             mediaNormal += tiempo;
         }
@@ -607,7 +591,7 @@ public class Modelo {
         numeroCorte = (int) bolzano(1, 1000000000);
     }
 
-    private double bolzano(double a, double b) {
+    public double bolzano(double a, double b) {
         double m = (a + b) / 2;
         double vm = funcio(m);
         double vb = funcio(b);
@@ -622,9 +606,26 @@ public class Modelo {
         }
     }
 
-    private double funcio(double n) {
+    public double funcio(double n) {
         double res;
         res = (Math.pow(n, 2) / Math.pow(n, ((Math.log(3.0) / Math.log(2.0))))) - constante;
         return res;
+    }
+    
+    @Override
+    public void notificar(String s) {
+        if (s.startsWith("Normal")) {
+            this.runNormal();
+        } else if (s.startsWith("Karatsuba")) {
+            this.runKaratsuba();
+        } else if (s.startsWith("Mixto")) {
+            try {
+                this.runMixto();
+            } catch (IOException ex) {
+                Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (s.startsWith("SetNums")) {
+            this.setNums();
+        }
     }
 }
