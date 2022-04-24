@@ -6,14 +6,7 @@
 package Modelo;
 
 import Principal.Main;
-import Principal.Error;
 import Principal.Eventos;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,7 +63,7 @@ public class Modelo implements Eventos {
     }
      
       public void runMixto() throws IOException {
-        ArrayList<Integer> resultado = funcionMitxa(this.num1, this.num2);
+        ArrayList<Integer> resultado = algoritmoMixto(this.num1, this.num2);
         Collections.reverse(resultado);
         this.prog.getView().añadirTexto(resultado.toString().replace(", ", ""));
     }
@@ -93,7 +86,7 @@ public class Modelo implements Eventos {
         int n;
 
         if (i.size() < 2 || j.size() < 2) {
-            auxiliar = MultiplicacionPequeñaKaratsuba(i, j);
+            auxiliar = multiplicacionPequeñaKaratsuba(i, j);
             return auxiliar;
         }
 
@@ -112,9 +105,9 @@ public class Modelo implements Eventos {
         segundo = karatsuba(b, d);
         tercero = karatsuba(suma(a, b), suma(c, d));
         
-        particion1 = suma(multiplicaion(resta(resta(tercero, primero), segundo), n), segundo);
+        particion1 = suma(multiplicacion(resta(resta(tercero, primero), segundo), n), segundo);
 
-        particion2 = multiplicaion(primero, n * 2);
+        particion2 = multiplicacion(primero, n * 2);
 
         return suma(particion2, particion1);
     }
@@ -196,34 +189,9 @@ public class Modelo implements Eventos {
         return solucion;
     }
     
-    public ArrayList<Integer> funcionMitxa(ArrayList<Integer> i, ArrayList<Integer> j) throws FileNotFoundException, IOException {
-        File archivo = new File("PuntoCorte.txt");
-
-        if (!archivo.exists()) {
-
-            FileWriter fw = new FileWriter(archivo);
-            BufferedWriter bw = new BufferedWriter(fw);
-            calculoCorte();
-            bw.write(numeroCorte);
-
-            bw.close();
-            fw.close();
-            
-        } else {
-            
-            FileReader fr = new FileReader(archivo);
-            BufferedReader br = new BufferedReader(fr);
-            numeroCorte = br.read();
-            br.close();
-            fr.close();
-            
-        }
-        return AlgoritmoMitxo(i, j);
-    }
-    
     /**************************************************************************/
     
-    private ArrayList<Integer> MultiplicacionPequeñaKaratsuba(ArrayList<Integer> i, ArrayList<Integer> j) {
+    private ArrayList<Integer> multiplicacionPequeñaKaratsuba(ArrayList<Integer> i, ArrayList<Integer> j) {
 
         ArrayList<Integer> solucion = new ArrayList<>();
         ArrayList<Integer> numero1;
@@ -291,12 +259,12 @@ public class Modelo implements Eventos {
         }
 
         if ((negativo1 && negativo2)) {//Caso en el que los 2 numeros son negativos
-            solucion = OperacionSuma(numero1, numero2);
+            solucion = operacionSuma(numero1, numero2);
             solucion.add(-1);
         }
 
         if ((!negativo1 && !negativo2)) {//Caso en el que los 2 numeros son positivos
-            solucion = OperacionSuma(numero1, numero2);
+            solucion = operacionSuma(numero1, numero2);
 
         }
 
@@ -383,32 +351,32 @@ public class Modelo implements Eventos {
         }
 
         if ((negativo1 && negativo2)) {//Caso en el que los 2 numeros son negativos
-            solucion = OperacionResta(numero1, numero2);
+            solucion = operacionResta(numero1, numero2);
             if (!cambio) {//Si no ha habido cambio de numeros cambiamos el signo
                 solucion.add(-1);
             }
         }
 
         if ((!negativo1 && !negativo2)) {//Caso en el que los 2 numeros son positivos
-            solucion = OperacionResta(numero1, numero2);
+            solucion = operacionResta(numero1, numero2);
             if (cambio) {
                 solucion.add(-1);
             }
         }
 
         if ((negativo1 && !negativo2)) {//Caso en el que el primer numero es positivo y el segundo es negativo
-            solucion = OperacionSuma(numero1, numero2);
+            solucion = operacionSuma(numero1, numero2);
             solucion.add(-1);
         }
 
         if ((!negativo1 && negativo2)) {//Caso en el que el primer numero es positivo y el segunddo es negativo
-            solucion = OperacionSuma(numero1, numero2);
+            solucion = operacionSuma(numero1, numero2);
         }
 
         return solucion;
     }
     
-    private ArrayList<Integer> OperacionResta(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
+    private ArrayList<Integer> operacionResta(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
 
         int auxiliar3;
         int acarreo = 0;
@@ -442,7 +410,7 @@ public class Modelo implements Eventos {
         return solucion;
     }
 
-    private ArrayList<Integer> OperacionSuma(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
+    private ArrayList<Integer> operacionSuma(ArrayList<Integer> numero1, ArrayList<Integer> numero2) {
         int auxiliar3;
         int acarreo = 0;
         ArrayList<Integer> solucion = new ArrayList<>();
@@ -473,7 +441,7 @@ public class Modelo implements Eventos {
         return solucion;
     }
     
-    private ArrayList<Integer> multiplicaion(ArrayList<Integer> i, int j) {//No hace mulyiplicar array ya que nunca se hace, solo multiplicac por 10 elevado a algo, que es lo mismo qie poner ceros en el array 
+    private ArrayList<Integer> multiplicacion(ArrayList<Integer> i, int j) {//No hace mulyiplicar array ya que nunca se hace, solo multiplicac por 10 elevado a algo, que es lo mismo qie poner ceros en el array 
         boolean aux = false;
         if (i.get(i.size() - 1) == -1) {//Miramos si el primer numero es negativo y le quitamos el signo
             //i.remove(0);
@@ -491,7 +459,7 @@ public class Modelo implements Eventos {
         return i;
     }
     
-    public ArrayList<Integer> AlgoritmoMitxo(ArrayList<Integer> i, ArrayList<Integer> j) {
+    public ArrayList<Integer> algoritmoMixto(ArrayList<Integer> i, ArrayList<Integer> j) {
         ArrayList<Integer> auxiliar;
         ArrayList<Integer> a;
         ArrayList<Integer> b;
@@ -523,13 +491,13 @@ public class Modelo implements Eventos {
 
         c = new ArrayList<>(j.subList(n, j.size()));
 
-        primero = karatsuba(a, c);
-        segundo = karatsuba(b, d);
-        tercero = karatsuba(suma(a, b), suma(c, d));
+        primero = algoritmoMixto(a, c);
+        segundo = algoritmoMixto(b, d);
+        tercero = algoritmoMixto(suma(a, b), suma(c, d));
 
-        particion1 = suma(multiplicaion(resta(resta(tercero, primero), segundo), n), segundo);
+        particion1 = suma(multiplicacion(resta(resta(tercero, primero), segundo), n), segundo);
 
-        particion2 = multiplicaion(primero, n * 2);
+        particion2 = multiplicacion(primero, n * 2);
 
         return suma(particion2, particion1);
     }
@@ -610,6 +578,14 @@ public class Modelo implements Eventos {
         double res;
         res = (Math.pow(n, 2) / Math.pow(n, ((Math.log(3.0) / Math.log(2.0))))) - constante;
         return res;
+    }
+    
+    public int getNumeroCorte() {
+        return this.numeroCorte;
+    }
+    
+    public void setNumeroCorte(int n) {
+        this.numeroCorte = n;
     }
     
     @Override

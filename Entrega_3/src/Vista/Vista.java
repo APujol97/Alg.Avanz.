@@ -14,15 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import Principal.Main;
 import Principal.Error;
+import Principal.Eventos;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Random;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -32,7 +29,7 @@ import javax.swing.JTextField;
  *
  * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
-public class Vista extends JFrame implements ActionListener {
+public class Vista extends JFrame implements ActionListener, Eventos {
 
     private Main prog;
     private JProgressBar barra;
@@ -40,6 +37,7 @@ public class Vista extends JFrame implements ActionListener {
     private JTextField num2;
     private JLabel error;
     private JTextArea solution;
+    private RandomFrame rf;
     
     public Vista(String s, Main p) {
         super(s);
@@ -47,6 +45,8 @@ public class Vista extends JFrame implements ActionListener {
         this.getContentPane().setLayout(new BorderLayout());
         JPanel inputs = new JPanel();
         //--
+        
+        //Input number 1
         num1 = new JTextField("",20);
         num1.addKeyListener(new KeyAdapter() {
         public void keyTyped(KeyEvent e) {
@@ -58,11 +58,13 @@ public class Vista extends JFrame implements ActionListener {
         });
         inputs.add(num1);
         
+        //X label
         JLabel x = new JLabel("   X   ");
         inputs.add(x);
         
+        //Input number 2
         num2 = new JTextField("",20);
-        num1.addKeyListener(new KeyAdapter() {
+        num2.addKeyListener(new KeyAdapter() {
         public void keyTyped(KeyEvent e) {
             char c = e.getKeyChar();
             if ( ((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) {
@@ -72,6 +74,18 @@ public class Vista extends JFrame implements ActionListener {
         });
         inputs.add(num2);
         
+        //Button random
+        JButton btnRandom = new JButton("Random");
+        btnRandom.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rf = new RandomFrame(prog);
+            }
+        });
+        btnRandom.setVisible(true);
+        inputs.add(btnRandom);
+        
+        //Button clean
         JButton btnClean = new JButton("Limpiar");
         btnClean.addActionListener(new ActionListener() {
             @Override
@@ -125,8 +139,8 @@ public class Vista extends JFrame implements ActionListener {
         JScrollPane sp = new JScrollPane(solution);
         centralPanel.add(BorderLayout.CENTER, sp);
         
-        barra = new JProgressBar(0, 100);
-        barra.setValue(0);
+        barra = new JProgressBar();
+        barra.setString("");
         barra.setStringPainted(true);
         //--
         this.add(BorderLayout.NORTH, inputs);
@@ -148,6 +162,26 @@ public class Vista extends JFrame implements ActionListener {
     
     public String getNum2() {
         return this.num2.getText();
+    }
+    
+    public void setRandomNum1(int cifras) {
+        Random ran = new Random();
+        String random = "";
+        
+        for (int i = 0; i < cifras; i++) {
+            random = random + String.valueOf(ran.nextInt(9));
+        }
+        this.num1.setText(random);
+    }
+    
+    public void setRandomNum2(int cifras) {
+        Random ran = new Random();
+        String random = "";
+        
+        for (int i = 0; i < cifras; i++) {
+            random = random + String.valueOf(ran.nextInt(9));
+        }
+        this.num2.setText(random);
     }
 
     public void mostrar() {
@@ -181,5 +215,13 @@ public class Vista extends JFrame implements ActionListener {
         }
         
     }
-  
+
+    @Override
+    public void notificar(String s) {
+        if (s.startsWith("Start")) {
+            this.barra.setIndeterminate(true);
+        } else if (s.startsWith("End")) {
+            this.barra.setIndeterminate(false);
+        }
+    }
 }

@@ -25,24 +25,25 @@ public class Control extends Thread implements Eventos {
     }
 
     public void run() {
+        this.prog.getView().notificar("Start");
         this.prog.getModel().notificar("SetNums");
         switch (tipo) {
-            case 1:
-                this.prog.getView().añadirTexto("Cálculo de la multiplicaion normal");
+            case 1:               
+                this.prog.getView().añadirTexto("Cálculo de la multiplicacion normal");
                 tiempo = System.currentTimeMillis();
                 this.prog.getModel().notificar("Normal");
                 tiempo = System.currentTimeMillis() - tiempo;
                 this.prog.getView().añadirTexto("Tiempo en ms " + tiempo + "\n");
                 break;
             case 2:
-                this.prog.getView().añadirTexto("Cálculo de la multiplicaion de Karatsuba");
+                this.prog.getView().añadirTexto("Cálculo de la multiplicacion de Karatsuba");
                 tiempo = System.currentTimeMillis();
                 this.prog.getModel().notificar("Karatsuba");
                 tiempo = System.currentTimeMillis() - tiempo;
                 this.prog.getView().añadirTexto("Tiempo en ms " + tiempo + "\n");
                 break;
             case 3:
-                this.prog.getView().añadirTexto("Cálculo de la multiplicaion mixta");
+                this.prog.getView().añadirTexto("Cálculo de la multiplicacion mixta");
                 tiempo = System.currentTimeMillis();
                 this.prog.getModel().notificar("Mixto");
                 tiempo = System.currentTimeMillis() - tiempo;
@@ -51,7 +52,7 @@ public class Control extends Thread implements Eventos {
             default:
                 break;
         }
-
+        this.prog.getView().notificar("End");
     }
 
     private void espera(long m, int n) {
