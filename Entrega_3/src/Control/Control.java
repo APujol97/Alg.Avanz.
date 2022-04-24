@@ -17,7 +17,6 @@ public class Control extends Thread implements Eventos {
 
     private Main prog;
     private int tipo;
-    private int iteraciones=32;
     private long tiempo;
 
     public Control(Main p) {
