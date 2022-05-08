@@ -11,6 +11,10 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+/**
+ *
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
+ */
 public class EntradaSalida {
 
     public Hashtable hash;

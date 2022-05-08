@@ -8,7 +8,7 @@ package Modelo;
 
 /**
  *
- * @author Usuario
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class Nodo implements Comparable<Nodo> {
 
