@@ -127,6 +127,8 @@ public class Modelo implements Eventos {
     private void preorden(Nodo nodo) {
         if (nodo.getHijoIzq() == null || nodo.getHijoDer() == null) {
             hashCodigo.put(nodo.getBite(), codigo);
+            //imprimimos codificación Huffman
+            this.prog.getView().añadirTexto("BYTE -> " +  nodo.getBite() + " Freq -> " + nodo.getFreq() + " CODIGO -> " + codigo);
             //   System.out.println("BYTE -> " +  nodo.getBite() + " Freq -> " + nodo.getFreq() + " CODIGO -> " + codigo);
             return;
         }
@@ -145,7 +147,6 @@ public class Modelo implements Eventos {
 
     private void postorden(Nodo nodo, int auxiliar) throws Exception {
         if (nodo.getHijoIzq() == null || nodo.getHijoDer() == null) {
-            //   System.out.println("Nodo final:" + nodo.getBite() + "  Indice:" + indice);
             indice++;
             RASE.writeByte((byte) indice);
             RASE.writeByte(nodo.getBite());
@@ -158,7 +159,6 @@ public class Modelo implements Eventos {
         auxiliar = indice;
         postorden(nodo.getHijoDer(), auxiliar);
         indice++;
-        // System.out.println("Nodo: " + (indice) + " Nodo IZQ - " + auxiliar + " Nodo DER - " + (indice - 1));
         RASE.writeByte((byte) indice);
         RASE.writeByte(nodo.getBite());
         RASE.writeByte((byte) auxiliar);
@@ -167,6 +167,6 @@ public class Modelo implements Eventos {
 
     @Override
     public void notificar(String s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

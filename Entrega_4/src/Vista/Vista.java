@@ -137,7 +137,6 @@ public class Vista extends JFrame implements ActionListener, Eventos {
     }
     
     public void mostrar() {
-        //this.pack();
         this.setSize(700, 500);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -170,6 +169,6 @@ public class Vista extends JFrame implements ActionListener, Eventos {
 
     @Override
     public void notificar(String s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

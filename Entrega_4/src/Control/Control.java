@@ -28,7 +28,6 @@ public class Control extends Thread implements Eventos {
 
     public void run() {
         try {
-            //Clean file path
             this.filePath = "";
             
             switch(this.type) { 

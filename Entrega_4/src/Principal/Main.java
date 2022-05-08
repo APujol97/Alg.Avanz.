@@ -21,7 +21,7 @@ public class Main implements Eventos {
     private Control con;  // puntero al Control
 
     /*
-        Construcció de l'esquema MVC
+        Construcción del esquema MVC
      */
     private void inicio() throws IOException {
         mod = new Modelo(this);
@@ -36,7 +36,7 @@ public class Main implements Eventos {
  
 
     /*
-        Función símple de la comunicació por eventos
+        Función símple de la comunicación por eventos
      */
     @Override
     public void notificar(String s) {
@@ -50,14 +50,14 @@ public class Main implements Eventos {
     }
 
     /*
-        Método public de retorno de la instancia del modelo de dades
+        Método publico de retorno de la instancia del modelo de datos
     */
     public Modelo getModel() {
         return mod;
     }
     
     /*
-        Método public de retorno de la instancia de la vista
+        Método publico de retorno de la instancia de la vista
     */
     public Vista getView() {
         return vis;

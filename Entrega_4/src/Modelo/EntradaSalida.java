@@ -85,7 +85,6 @@ public class EntradaSalida {
                     }
                 }
                 leidos = leidos + n;
-                //System.out.println(leidos);
             }
 
             RAS.close();
@@ -204,6 +203,7 @@ public class EntradaSalida {
             leidos++;
             for (int i = 0; i < longuitud; i++) {
                 auxiliar2 += (char) RAS.readByte();
+                leidos++;
             }
 
             ficheroDescompreso = new File("FicheroDescompreso" + nombreAux + "." + auxiliar2);
@@ -212,8 +212,6 @@ public class EntradaSalida {
             }
 
             RASE = new RandomAccessFile(ficheroDescompreso, "rw");
-            //RASE = new RandomAccessFile("FicheroDescompreso.png", "rw");
-            //RASE = new RandomAccessFile("FicheroDescompreso.pdf", "rw");
             byte[] fileContent;
             cantidad = 1; // esto me pilla todo el tamaño del archivo, lo carga todo en memoria igual
             maximo = RAS.length();
@@ -259,10 +257,8 @@ public class EntradaSalida {
                     nodoAux = nodo;
                 }
 
-                // for (int i = 0; i < n; i++) {
                 byteLeido = fileContent[0];
                 String s1 = String.format("%8s", Integer.toBinaryString(byteLeido & 0xFF)).replace(' ', '0');
-                //  System.out.println(s1);
 
                 if (leidos != maximo - 1) {
                     for (int i = 0; i < s1.length(); i++) {
@@ -295,7 +291,7 @@ public class EntradaSalida {
                 leidos = leidos + n;
                 //System.out.println(leidos);
             }
-
+            RASE.close();
             RAS.close();
         } catch (Exception ex) {
             System.out.println("ERROR EN LA DESCOMPRESION DEL FICHERO");
