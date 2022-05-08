@@ -112,12 +112,8 @@ public class Modelo implements Eventos {
         System.out.println();
         entropia = (ES.tamComprimido() * 8) / totalFrec;
         this.prog.getView().añadirTexto("ENTROPIA  =" + entropia);
+        this.prog.getView().añadirTexto("Tamaño después de compresión: "+ES.tamComprimido());
         
-    }
-    
-    public long getTamComprimido() {
-
-        return ES.tamComprimido;
     }
     
     public void descomprimir(String file) {
@@ -130,7 +126,6 @@ public class Modelo implements Eventos {
             hashCodigo.put(nodo.getBite(), codigo);
             //imprimimos codificación Huffman
             this.prog.getView().añadirTexto("BYTE -> " +  nodo.getBite() + " Freq -> " + nodo.getFreq() + " CODIGO -> " + codigo);
-            //   System.out.println("BYTE -> " +  nodo.getBite() + " Freq -> " + nodo.getFreq() + " CODIGO -> " + codigo);
             return;
         }
 
