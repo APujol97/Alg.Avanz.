@@ -95,10 +95,8 @@ public class EntradaSalida {
 
     public void Comprimir(File fich,int desplazamiento) {
         int leidos = 0;
-        int valor = 0;
         String codificacion = "";
         String auxiliar = "";
-        Byte prueba;
         try {
 
             RAS = new RandomAccessFile(fichero, "rw");

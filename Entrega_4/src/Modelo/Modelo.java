@@ -42,7 +42,6 @@ public class Modelo implements Eventos {
         String auxNombre[] = new String[] {parts[parts.length-2], parts[parts.length-1]};
         String extension = auxNombre[1];
         EntradaSalida ES = new EntradaSalida(hashFrecuencia, nombreFichero);
-        
 
         int numeroAuxiliar = 0;
         Nodo nodo;
@@ -56,6 +55,7 @@ public class Modelo implements Eventos {
         this.prog.getView().añadirTexto("Obteniendo frecuencia");
         ES.leer();
         hashFrecuencia = ES.getHash();
+        this.prog.getView().añadirTexto("Tamaño antes de comprimir: "+ES.getMaximo());
 
         this.prog.getView().añadirTexto("Creando arbol - Calculando entropia");
         totalFrec = (int) ES.getMaximo();
@@ -82,8 +82,6 @@ public class Modelo implements Eventos {
             cola.add(auxiliar);
         }
         arbol = cola.poll();
-        
-        
         
         File ficheroCompreso = new File("FicheroCompreso" + auxNombre[0] + ".dat");
             if (ficheroCompreso.exists()) {
@@ -115,8 +113,11 @@ public class Modelo implements Eventos {
         entropia = (ES.tamComprimido() * 8) / totalFrec;
         this.prog.getView().añadirTexto("ENTROPIA  =" + entropia);
         
-        
-        
+    }
+    
+    public long getTamComprimido() {
+
+        return ES.tamComprimido;
     }
     
     public void descomprimir(String file) {

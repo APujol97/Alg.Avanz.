@@ -40,6 +40,7 @@ public class Control extends Thread implements Eventos {
                     tiempo = System.currentTimeMillis() - tiempo;
                     this.prog.getView().añadirTexto("Compresión finalizada");
                     this.prog.getView().añadirTexto("Tiempo en ms " + tiempo + "\n");
+                    this.prog.getView().añadirTexto("Tamaño después de compresión: "+this.prog.getModel().getTamComprimido());
                     break;
                     
                 case 2: 
