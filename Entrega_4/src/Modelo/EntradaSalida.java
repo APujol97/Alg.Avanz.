@@ -153,7 +153,7 @@ public class EntradaSalida {
 
                         auxiliar = auxiliar + "0";
                     }
-                    RASE.writeByte((byte) Integer.parseInt(auxiliar));
+                    RASE.writeByte((byte) Integer.parseInt(auxiliar, 2));
                     auxiliar = "";
 
                 } else {//CASO EN QUE LA CODIFICACCION ES MUY GRANDE Y DEPUES DE`PARTIR EL STRING SIGUE HABIENDO SUFICIENTES BITS PARA ESCRIBIR UN BIT
