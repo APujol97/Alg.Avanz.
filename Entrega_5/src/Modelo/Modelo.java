@@ -57,6 +57,8 @@ public class Modelo implements Eventos {
             aux = palabras_erroneas.get(i);
             this.prog.getView().replace(aux.getPalabra(), aux.getFirstProp(), aux.getIndex());
         }
+        this.palabras_erroneas.clear();
+        this.palabras_propuestas.clear();
     }
 
     public void detectarIdioma() {

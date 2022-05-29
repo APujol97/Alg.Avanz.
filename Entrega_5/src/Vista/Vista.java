@@ -203,8 +203,8 @@ public class Vista extends JFrame implements ActionListener, Eventos {
                                 String texto = JMI[i].getText();
                                 JMI[i].addActionListener(e3 -> {
                                     try {
-                                        replace(pal, texto, Utilities.getWordEnd(tp, tp.getCaretPosition()));
                                         prog.getModel().removePalabraErronea(pal, Utilities.getWordEnd(tp, tp.getCaretPosition()));
+                                        replace(pal, texto, Utilities.getWordEnd(tp, tp.getCaretPosition()));
                                     } catch (BadLocationException ex) {
                                         Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
                                     }
