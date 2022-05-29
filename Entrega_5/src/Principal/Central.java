@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entrega_5;
+package Principal;
 
-import Modelo.Datos;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Observable;
@@ -23,7 +22,6 @@ import javax.swing.text.StyleContext;
  */
 public class Central extends JPanel implements Observer {
 
-    private Datos dad;
     private StyleContext corr;
     private Style correctas;
     private StyleContext erro;
@@ -33,8 +31,7 @@ public class Central extends JPanel implements Observer {
     private final int ancho = 800;
     private final int alto = 600;
 
-    public Central(Datos d) {
-        dad = d;
+    public Central() {
         document = new DefaultStyledDocument();
         panel = new JTextPane(document);
         panel.setPreferredSize(new Dimension(ancho, alto));
