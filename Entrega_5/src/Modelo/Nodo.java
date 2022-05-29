@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author pujol
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class Nodo {
     

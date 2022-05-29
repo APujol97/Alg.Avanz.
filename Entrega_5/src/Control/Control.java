@@ -35,11 +35,10 @@ public class Control extends Thread implements Eventos {
                     this.prog.getModel().cleanCache();    
                     this.prog.getModel().detectarIdioma();
                     int nErrores = this.prog.getModel().detectarErrores();
-                    //colorear palabras erróneas
+                    this.prog.getView().markIncorrect(this.prog.getModel().getPalabras_erroneas());
                     
                     tiempo = System.currentTimeMillis() - tiempo;
-                    this.prog.getView().setOutput("Tiempo transcurrido: " + tiempo + "\n");
-                    this.prog.getView().setOutput("Palabras incorrectas: " + nErrores + "\n");
+                    this.prog.getView().setOutput("Tiempo transcurrido: " + tiempo  + "\nPalabras incorrectas: " + nErrores + "\n");
                     break;
                     
                 case 2: 

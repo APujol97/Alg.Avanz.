@@ -37,8 +37,8 @@ public class Modelo implements Eventos {
         this.setText();
 
         text = text.toLowerCase(); // o se hace antes;
-        for (int i = 0; i < text.length(); i++) {
-            if (!this.isSepChar(text.charAt(i))) { //VIGILA!!!
+        for (int i = 0; i <= text.length(); i++) {
+            if (i != text.length() && !this.isSepChar(text.charAt(i))) { //VIGILA!!!
                 palabra += text.charAt(i);
             } else if (!"".equals(palabra)){
                 lect = new Lectura(idioma);
@@ -69,25 +69,25 @@ public class Modelo implements Eventos {
         text = text.toLowerCase(); // o se hace antes;
         double costeCastellano = 0, costeingles = 0, costecatala = 0;
         // double aux1 = 0, aux2 = 0, aux3 = 0;
-        for (int i = 0, indice = 0; i < text.length() && indice < 10; i++) {
-            if (!this.isSepChar(text.charAt(i))) { //VIGILA!!!
+        for (int i = 0, indice = 0; i <= text.length() && indice < 10; i++) {
+            if (i != text.length() && !this.isSepChar(text.charAt(i))) { //VIGILA!!!
                 palabra += text.charAt(i);
-            } else {
+            } else if (!"".equals(palabra)){
                 lect = new Lectura("catalan.dic");
                 lect.openFile();
-                costecatala += analizarPalabra2(lect, palabra);
+                costecatala += analizarCoste(lect, palabra);
                 lect.closeFile();
 
                 lect = new Lectura("castellano.dic");
                 lect.openFile();
                 lect.openFile();
-                costeCastellano += analizarPalabra2(lect, palabra);
+                costeCastellano += analizarCoste(lect, palabra);
                 lect.closeFile();
 
                 lect = new Lectura("ingles.dic");
                 lect.openFile();
                 lect.openFile();
-                costeingles += analizarPalabra2(lect, palabra);
+                costeingles += analizarCoste(lect, palabra);
                 lect.closeFile();
 
                 indice++;
@@ -116,6 +116,10 @@ public class Modelo implements Eventos {
         this.idioma = "";
         this.text = "";
     }
+
+    public ArrayList<Nodo> getPalabras_erroneas() {
+        return palabras_erroneas;
+    }   
     
     private boolean isSepChar(char c) {
         for (int i = 0; i < SEPARADORES.length; i++) {
@@ -159,7 +163,7 @@ public class Modelo implements Eventos {
         this.text = this.prog.getView().getText();
     }
 
-    private int analizarPalabra2(Lectura lect, String pal) {
+    private int analizarCoste(Lectura lect, String pal) {
         Nodo nodo;
         String word;
         int coste = -1;

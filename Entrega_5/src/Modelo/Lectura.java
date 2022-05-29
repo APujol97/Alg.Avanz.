@@ -10,19 +10,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
- * @author pujol
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class Lectura {
     
     private BufferedReader BR;
-    String[] nombreFichero;
+    private String[] nombreFichero;
     public File fichero;
     
     

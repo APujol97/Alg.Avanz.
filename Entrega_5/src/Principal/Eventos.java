@@ -6,7 +6,7 @@
 package Principal;
 
 /**
- *      Interfaz de comunicación pr eventos
+ *      Interfaz de comunicación por eventos
  * 
  * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
