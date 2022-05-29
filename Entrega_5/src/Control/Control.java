@@ -44,8 +44,7 @@ public class Control extends Thread implements Eventos {
                 case 2: 
                     tiempo = System.currentTimeMillis();
                     
-                    this.prog.getModel().corregir(); //Cambia por la primera
-                    //colorear palabras corregidas dando la opcion de más cambios
+                    this.prog.getModel().corregir();
                                    
                     tiempo = System.currentTimeMillis() - tiempo;
                     break;
