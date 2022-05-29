@@ -21,7 +21,7 @@ public class Modelo implements Eventos {
     private ArrayList<String> palabras_propuestas;
     private Lectura lect;
     private String idioma;
-    private final char[] SEPARADORES = {' ', ',', '.', ';', ':', '?', '¿', '!', '¡', '(', ')'};
+    private final char[] SEPARADORES = {' ', ',', '.', ';', ':', '?', '¿', '!', '¡', '(', ')', '"'};
 
     public Modelo(Main p) {
         prog = p;
