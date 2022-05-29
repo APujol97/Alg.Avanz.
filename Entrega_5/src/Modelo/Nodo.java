@@ -55,4 +55,8 @@ public class Nodo {
     public void setIndex(int i) {
         this.index = i;
     }
+
+    public ArrayList<String> getPalabras_propuestas() {
+        return palabras_propuestas;
+    }   
 }

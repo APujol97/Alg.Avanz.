@@ -121,6 +121,32 @@ public class Modelo implements Eventos {
         return palabras_erroneas;
     }   
     
+    public boolean isErronea(String pal) {
+        for (int i = 0; i < palabras_erroneas.size(); i++) {
+            if (pal.equals(palabras_erroneas.get(i).getPalabra())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public ArrayList<String> getPalabras_propuestas(String pal) {
+        for (int i = 0; i < palabras_erroneas.size(); i++) {
+            if (pal.equals(palabras_erroneas.get(i).getPalabra())) {
+                return palabras_erroneas.get(i).getPalabras_propuestas();
+            }
+        }
+        return null;
+    }
+    
+    public void removePalabraErronea(String pal, int index) {
+        for (int i = 0; i < palabras_erroneas.size(); i++) {
+            if (pal.equals(palabras_erroneas.get(i).getPalabra()) && index == palabras_erroneas.get(i).getIndex()) {
+                palabras_erroneas.remove(i);
+            }
+        }
+    }
+    
     private boolean isSepChar(char c) {
         for (int i = 0; i < SEPARADORES.length; i++) {
             if (SEPARADORES[i] == c) {
