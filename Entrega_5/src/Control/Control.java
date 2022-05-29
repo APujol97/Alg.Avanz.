@@ -47,6 +47,7 @@ public class Control extends Thread implements Eventos {
                     this.prog.getModel().corregir();
                                    
                     tiempo = System.currentTimeMillis() - tiempo;
+                    this.prog.getView().setOutput("Tiempo transcurrido: " + tiempo + "ms");
                     break;
             }
         } catch (Exception ex) {
