@@ -18,7 +18,6 @@ import java.io.IOException;
 public class Lectura {
     
     private BufferedReader BR;
-    private String[] nombreFichero;
     public File fichero;
     
     
