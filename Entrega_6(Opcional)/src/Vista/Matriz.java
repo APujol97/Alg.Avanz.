@@ -7,12 +7,6 @@ package Vista;
 
 import Modelo.Modelo;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 /**
@@ -22,18 +16,9 @@ import javax.swing.JPanel;
 public class Matriz extends JPanel{
 
     private Modelo dat;
-    private int posiciones[][];
-    private Image imgVacia;
-    private Image imagen;
 
     public Matriz(Modelo d) {
         dat = d;
-        try {
-            imgVacia = (this.createImage(ImageIO.read(new File("negro.jpg")).getSource())).getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH);
-            imagen = (this.createImage(ImageIO.read(new File("fondo.jpg")).getSource())).getScaledInstance(700, 700, java.awt.Image.SCALE_SMOOTH);;
-        } catch (IOException ex) {
-            Logger.getLogger(Matriz.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @Override
@@ -42,15 +27,17 @@ public class Matriz extends JPanel{
             paint(this.getGraphics());
         }
     }
-
+    
     @Override
     public void paint(Graphics g) {
+        int posiciones[][] = this.dat.getInicial().getEstado();
+        
         for (int i = 0; i < this.dat.getDimension(); i++) {
             for (int j = 0; j < this.dat.getDimension(); j++) {
                 if (posiciones[i][j] != -1) {
-                    g.drawImage(this.dat.getTrozo(posiciones[i][j]), j * this.getHeight() / this.dat.getDimension(), i * this.getWidth() / this.dat.getDimension(), null);
+                    g.drawImage(this.dat.getTrozos()[posiciones[i][j]], j * this.dat.getMultY(), i * this.dat.getMultX(), null);
                 } else {
-                    g.drawImage(imgVacia, j * this.getHeight() / this.dat.getDimension(), i * this.getWidth() / this.dat.getDimension(), null);
+                    g.drawImage(this.dat.getImgVacia(), j * this.dat.getMultY(), i * this.dat.getMultX(), null);
                 }
             }
         }

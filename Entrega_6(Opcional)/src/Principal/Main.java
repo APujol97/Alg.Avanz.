@@ -40,10 +40,7 @@ public class Main implements Eventos {
      */
     @Override
     public void notificar(String s) {
-        if(s.startsWith("Dimension")) {
-            con = new Control(this);
-            con.notificar(s); 
-        } else if(s.startsWith("Mezclar")) {
+        if(s.startsWith("Mezclar")) {
             con = new Control(this);
             con.notificar(s); 
         } else if(s.startsWith("Resolver")) {

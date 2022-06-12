@@ -30,17 +30,14 @@ public class Control extends Thread implements Eventos {
             switch (type) {
                 case 1: 
                         tiempo = System.currentTimeMillis();
-                        //Code here
+                        this.prog.getModel().mezclar(50);
+                        this.prog.getView().repaint();
                         tiempo = System.currentTimeMillis() - tiempo;
                         break;
                 case 2: 
                         tiempo = System.currentTimeMillis();
-                        //Code here
-                        tiempo = System.currentTimeMillis() - tiempo;
-                        break;
-                case 3: 
-                        tiempo = System.currentTimeMillis();
-                        //Code here
+                        this.prog.getModel().setInicial(this.prog.getModel().camino());
+                        this.prog.getView().repaint();
                         tiempo = System.currentTimeMillis() - tiempo;
                         break;
             }
@@ -61,14 +58,11 @@ public class Control extends Thread implements Eventos {
 
     @Override
     public void notificar(String s) {
-        if(s.startsWith("Dimension")) {
+        if(s.startsWith("Mezclar")) {
             this.type = 1;
             this.start();
-        }  else if(s.startsWith("Mezclar")) {
-            this.type = 2;
-            this.start();
         }  else if(s.startsWith("Resolver")) {
-            this.type = 3;
+            this.type = 2;
             this.start();
         } 
     }
