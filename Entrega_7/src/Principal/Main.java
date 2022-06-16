@@ -8,6 +8,11 @@ package Principal;
 import Control.Control;
 import Modelo.Modelo;
 import Vista.Vista;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -19,6 +24,8 @@ public class Main implements Eventos {
     private Modelo mod;    // Puntero al Modelo
     private Vista vis;    // Puntero a la Vista
     private Control con;  // puntero al Control
+    
+    private final String dataBaseFile = "basedatos.ltim";
 
     /*
         Construcción del esquema MVC
@@ -27,12 +34,26 @@ public class Main implements Eventos {
         mod = new Modelo(this);
         con = null;
         //vis = new Vista("Entrega_7", this);
+        generarBD();
         //vis.mostrar();
     }
     
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
         (new Main()).inicio();
+    }
+    
+    public void generarBD(){
+        File archivo = new File(dataBaseFile);
+        if (!archivo.exists()){
+            this.mod.crearBD(archivo);
+        } else {
+            this.mod.cargarBD(archivo);
+        }
+    }
+    
+    public String getDataBaseFile(){
+        return dataBaseFile;
     }
     
     /*
