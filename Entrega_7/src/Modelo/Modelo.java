@@ -5,17 +5,17 @@
  */
 package Modelo;
 
+import Colores.Paleta;
 import Principal.Eventos;
 import Principal.Main;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.File;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.Map;
 import javax.imageio.ImageIO;
 
 /**
@@ -25,51 +25,125 @@ import javax.imageio.ImageIO;
 public class Modelo implements Eventos {
 
     private Main prog;
-    private ArrayList<Bandera> DB;
+    private Paleta paleta;
+    private HashMap<String, Integer> colores;
+    //hash para cada bandera en la BD y que contenga los puntos
+    private HashMap<String, Integer> banderasBD;
 
     public Modelo(Main p) {
         prog = p;
+        paleta = new Paleta();
+        this.colores = new HashMap <> ();
+        colores.put("Blanco",0);
+        colores.put("Negro",0);
+        colores.put("Rojo",0);
+        colores.put("Verde",0);
+        colores.put("Azul",0);
+        colores.put("Amarillo",0);
+        colores.put("Naranja",0);
     }
     
-    public void procesarBD(BufferedImage img, String fichero){
+    public Bandera procesarImagenBandera(BufferedImage img, int pixelesMuestreo){
+        /*
+        Procesar la imagen leída para devolver bandera con estimación del
+        % de colores a partir de N pixeles, el profe recomendó 500px. 
+        
+        Este sería el primer algoritmo probabilístico, que devolvería 
+        una bandera con diferente estimación de colores por cada ejecución 
+        desde Control.java.
+        */
+        
+        return null;
+    }
+    
+    public ArrayList<String> getNombreBanderaDeImagen(Bandera banderaIMG){
+        /*
+        Comparar los colores de la bandera por cada bandera en la BD.
+        
+        En cada iteración comparamos los colores de banderaIMG con los de
+        una bandera de banderasBD. si para ese color la diferencia está entre
+        el 3.00%, se suma un punto a banderasBD.put(esta_bandera, value+1), y así
+        con todas las banderas de banderaBD. Una vez acabado se coge la o las que
+        más puntos tiene y esa es la que se devuelve el país.
+        
+        Lo del 3.00% de diferencia lo comentó el profe como buena heurística
+        
+        Este método se llamaría N veces desde Cntrol.java, el profe recomienda 5, 
+        pues es el segundo algoritmo probabilístico, y recibe siempre una bandera
+        diferente de lo devuelto en procesarImagenBandera().
+        */
+        
+        return null;
+    }
+
+    public Bandera procesarBD(BufferedImage img, String fichero) {
         //https://stackoverflow.com/questions/6524196/java-get-pixel-array-from-image
-        //algoritmo tradicional de detectar colores pixel por pixel
-        byte[] pixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
+        //byte[] pixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
         int width = img.getWidth();
         int height = img.getHeight();
-        boolean hasAlpha = img.getAlphaRaster() != null;
-        int pixelLength = 0;
+//        int rgb = 0;
+//        int red = 0;
+//        int green = 0;
+//        int blue = 0;
+        String colorName;
         
-        if(hasAlpha){
-            pixelLength = 4;
-            
-        } else {
-            pixelLength = 3;
+        Bandera bandera = new Bandera(fichero);
+        
+        //algoritmo tradicional de pixelado
+        for (int pixelX = 0; pixelX < width; pixelX++) {
+            for (int pixelY = 0; pixelY < height; pixelY++) {
+//                rgb = img.getRGB(pixelX, pixelY);
+//                red = (rgb & 0xff) >> 16;
+//                green = (rgb & 0xff) >> 8;
+//                blue = (rgb & 0xff);
+                colorName = paleta.getNombre(paleta.analizarColor(new Color(img.getRGB(pixelX, pixelY))));
+                colores.put(colorName,colores.get(colorName)+1);
+            }
         }
         
+        int area = width*height;
+        int value;
+        
+        for(Map.Entry<String, Integer> entry : colores.entrySet()){
+            value = entry.getValue();
+            //ponemos porcentaje
+            bandera.putColorValue(entry.getKey(),Double.valueOf(value)/Double.valueOf(area)*100.00);
+        }
+        
+        return bandera;
+
+    }
+    
+    public void grabarBandera(Bandera bandera){
+        //escribir serializable de bandera, o stringLine???
     }
 
     public void crearBD(File fileBD) {
-        
+        // cargamos banderas en banderasBD mientras se crea???
         try {
+            
             String base = System.getProperty(Paths.get("").toAbsolutePath().toString() + "/flags");
             URL bandsIMG = getClass().getResource(base);
             BufferedImage bfImage;
             File dir = new File(bandsIMG.toURI());
             String[] ficheros = dir.list();
+            Bandera bandera;
+            //open escritor
             for (int i = 0; i < ficheros.length; i++) {
                 bfImage = ImageIO.read(new File(base + ficheros[i]));
-                procesarBD(bfImage, ficheros[i]);
-                //grabarBD();
+                bandera = procesarBD(bfImage, ficheros[i]);
+                //grabarBD(bandera) escribir bandera en fichero;
             }
-
+            //close escritor
+            
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
-    
-    public void cargarBD(File fileBD){
+
+    public void cargarBD(File fileBD) {
         //lectura del fichero serializable o linea a linea
+        //for-banderasBD.put();
     }
 
     @Override
@@ -77,5 +151,5 @@ public class Modelo implements Eventos {
         throw new UnsupportedOperationException("Not supported yet.");
 
     }
-    
+
 }
