@@ -19,6 +19,17 @@ public class Bandera {
     private HashMap<String, Double> colores;
     private int points;
     
+    public Bandera(){
+        this.colores = new HashMap <> ();
+        colores.put("Blanco",0.0);
+        colores.put("Negro",0.0);
+        colores.put("Rojo",0.0);
+        colores.put("Verde",0.0);
+        colores.put("Azul",0.0);
+        colores.put("Amarillo",0.0);
+        colores.put("Naranja",0.0);
+    }
+    
     public Bandera(String pais){
         this.nombrePais = pais;
         this.colores = new HashMap <> ();
@@ -32,15 +43,27 @@ public class Bandera {
         this.points = 0;
     }
     
+    public HashMap<String, Double> getPaleta(){
+        return colores;
+    }
+    
+    public String getNombrePais(){
+        return this.nombrePais;
+    }
+    
     public void addPoint(){
         this.points++;
     }
     
-    public void putColorValue(String color, Double value){
+    public int getPoints(){
+        return this.points;
+    }
+    
+    public void putColorValue(String color, double value){
         this.colores.put(color, value);
     }
     
-    public Double getColorValue(String color){
+    public double getColorValue(String color){
         return this.colores.get(color);
     }
     

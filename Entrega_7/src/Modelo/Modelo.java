@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import javax.imageio.ImageIO;
 
 /**
@@ -28,10 +29,13 @@ public class Modelo implements Eventos {
     private Paleta paleta;
     private HashMap<String, Integer> colores;
     //hash para cada bandera en la BD y que contenga los puntos
-    private HashMap<String, Integer> banderasBD;
+    private HashMap<String, Bandera> banderasBD;
+    private ArrayList<String> paises;
+    private Random rdm;
 
     public Modelo(Main p) {
         prog = p;
+        rdm = new Random();
         paleta = new Paleta();
         this.colores = new HashMap <> ();
         colores.put("Blanco",0);
@@ -41,19 +45,44 @@ public class Modelo implements Eventos {
         colores.put("Azul",0);
         colores.put("Amarillo",0);
         colores.put("Naranja",0);
+        paises =new ArrayList<>();
     }
     
     public Bandera procesarImagenBandera(BufferedImage img, int pixelesMuestreo){
         /*
         Procesar la imagen leída para devolver bandera con estimación del
         % de colores a partir de N pixeles, el profe recomendó 500px. 
+        Quizás un porcentaje es mejor
         
         Este sería el primer algoritmo probabilístico, que devolvería 
         una bandera con diferente estimación de colores por cada ejecución 
         desde Control.java.
         */
+        String colorName;
+        int height = img.getHeight();
+        int width = img.getWidth();
+        int pixelX, pixelY;
         
-        return null;
+        for(int i = pixelesMuestreo; i > 0; i--){
+            pixelX = (int) ((double) (width)*rdm.nextDouble());
+            pixelY = (int) ((double) (height)*rdm.nextDouble());
+            colorName = paleta.getNombre(paleta.analizarColor(new Color(img.getRGB(pixelX, pixelY))));
+            colores.put(colorName,colores.get(colorName)+1);
+        }
+        
+        int area = width*height;
+        int value;
+        Bandera bandera = new Bandera();
+        
+        for(Map.Entry<String, Integer> entry : colores.entrySet()){
+            value = entry.getValue();
+            //ponemos porcentaje
+            bandera.putColorValue(entry.getKey(),(double)(value)/(double)(area)*100.00);
+        }
+        
+        colores.entrySet().forEach((entry) -> {entry.setValue(0);});
+        
+        return bandera;
     }
     
     public ArrayList<String> getNombreBanderaDeImagen(Bandera banderaIMG){
@@ -73,7 +102,40 @@ public class Modelo implements Eventos {
         diferente de lo devuelto en procesarImagenBandera().
         */
         
-        return null;
+        Bandera banderaBD;
+        double valueIMG, valueBD;
+        
+        for(Map.Entry<String, Bandera> banderaIter : banderasBD.entrySet()){
+            banderaBD = banderaIter.getValue();
+            for(Map.Entry<String, Double> colorIter : banderaBD.getPaleta().entrySet()){
+                
+                valueIMG = banderaIMG.getColorValue(colorIter.getKey());
+                valueBD = colorIter.getValue();
+                
+                if(valueIMG-valueBD >= -3.00 && valueIMG-valueBD <= 3.00){
+                    //sumar punto en banderBD
+                    banderaBD.addPoint();
+                }
+            }
+        }
+        
+        int maxPoints = 0;
+        
+        for(Map.Entry<String, Bandera> banderaIter : banderasBD.entrySet()){
+            banderaBD = banderaIter.getValue();
+            if(banderaBD.getPoints() > maxPoints){
+                paises.clear();
+                maxPoints = banderaBD.getPoints();
+                paises.add(banderaBD.getNombrePais());
+            } else if(banderaBD.getPoints() == maxPoints){
+                paises.add(banderaBD.getNombrePais());
+            }
+        }
+        
+        ArrayList<String> paisesVar = paises;
+        paises.clear();
+        
+        return paisesVar;
     }
 
     public Bandera procesarBD(BufferedImage img, String fichero) {
@@ -107,8 +169,10 @@ public class Modelo implements Eventos {
         for(Map.Entry<String, Integer> entry : colores.entrySet()){
             value = entry.getValue();
             //ponemos porcentaje
-            bandera.putColorValue(entry.getKey(),Double.valueOf(value)/Double.valueOf(area)*100.00);
+            bandera.putColorValue(entry.getKey(),(double)(value)/(double)(area)*100.00);
         }
+        
+        colores.entrySet().forEach((entry) -> {entry.setValue(0);});
         
         return bandera;
 
