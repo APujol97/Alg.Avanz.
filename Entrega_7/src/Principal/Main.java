@@ -25,7 +25,7 @@ public class Main implements Eventos {
     private Vista vis;    // Puntero a la Vista
     private Control con;  // puntero al Control
     
-    private final String dataBaseFile = "basedatos.ltim";
+    private final String dataBaseFile = "banderasBD.txt";
 
     /*
         Construcción del esquema MVC
@@ -46,15 +46,15 @@ public class Main implements Eventos {
     public void generarBD(){
         File archivo = new File(dataBaseFile);
         if (!archivo.exists()){
-            this.mod.crearBD(archivo);
+            this.mod.crearBD(dataBaseFile);
         } else {
-            this.mod.cargarBD(archivo);
+            this.mod.cargarBD(dataBaseFile);
         }
     }
     
-    public String getDataBaseFile(){
-        return dataBaseFile;
-    }
+//    public String getDataBaseFile(){
+//        return dataBaseFile;
+//    }
     
     /*
         Función simple de la comunicación por eventos

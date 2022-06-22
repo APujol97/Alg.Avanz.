@@ -5,8 +5,10 @@
  */
 package Modelo;
 
-import java.io.File;
-import java.io.RandomAccessFile;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 /**
  *
@@ -14,11 +16,18 @@ import java.io.RandomAccessFile;
  */
 public class Lectura {
     
-    public RandomAccessFile RAF;
-    public File fichero;
+    public ObjectInputStream ois;
     
-    public Lectura(){
-        
+    public Lectura(String file) throws FileNotFoundException, IOException{
+        ois = new ObjectInputStream(new FileInputStream(file));
+    }
+    
+    public Object readObject() throws IOException, ClassNotFoundException{
+        return ois.readObject();
+    }
+    
+    public void close() throws IOException{
+        ois.close();
     }
     
 }

@@ -5,21 +5,20 @@
  */
 package Modelo;
 
-import Colores.Paleta;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  *
- * @author pujol
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
-public class Bandera {
+public class Bandera implements Serializable {
     
     private String nombrePais;
     private HashMap<String, Double> colores;
     private int points;
     
-    public Bandera(){
+    public Bandera() {
         this.colores = new HashMap <> ();
         colores.put("Blanco",0.0);
         colores.put("Negro",0.0);

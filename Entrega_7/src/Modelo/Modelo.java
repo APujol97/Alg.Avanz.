@@ -11,12 +11,15 @@ import Principal.Main;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -32,11 +35,14 @@ public class Modelo implements Eventos {
     private HashMap<String, Bandera> banderasBD;
     private ArrayList<String> paises;
     private Random rdm;
+    private Escritura esc;
+    private Lectura lec;
 
     public Modelo(Main p) {
         prog = p;
         rdm = new Random();
         paleta = new Paleta();
+        
         this.colores = new HashMap <> ();
         colores.put("Blanco",0);
         colores.put("Negro",0);
@@ -45,7 +51,7 @@ public class Modelo implements Eventos {
         colores.put("Azul",0);
         colores.put("Amarillo",0);
         colores.put("Naranja",0);
-        paises =new ArrayList<>();
+        paises = new ArrayList<>();
     }
     
     public Bandera procesarImagenBandera(BufferedImage img, int pixelesMuestreo){
@@ -178,11 +184,15 @@ public class Modelo implements Eventos {
 
     }
     
-    public void grabarBandera(Bandera bandera){
-        //escribir serializable de bandera, o stringLine???
+    public void grabarBD(Bandera bandera){
+        try {
+            esc.writeObject(bandera);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
-    public void crearBD(File fileBD) {
+    public void crearBD(String fileBD) {
         // cargamos banderas en banderasBD mientras se crea???
         try {
             
@@ -192,22 +202,35 @@ public class Modelo implements Eventos {
             File dir = new File(bandsIMG.toURI());
             String[] ficheros = dir.list();
             Bandera bandera;
-            //open escritor
-            for (int i = 0; i < ficheros.length; i++) {
-                bfImage = ImageIO.read(new File(base + ficheros[i]));
-                bandera = procesarBD(bfImage, ficheros[i]);
-                //grabarBD(bandera) escribir bandera en fichero;
+            esc = new Escritura(fileBD);
+            for (String fichero : ficheros) {
+                bfImage = ImageIO.read(new File(base + fichero));
+                bandera = procesarBD(bfImage, fichero);
+                grabarBD(bandera); //escribir bandera en fichero;
+                banderasBD.put(bandera.getNombrePais(), bandera); //cargamos en BD a la vez
             }
-            //close escritor
+            //escribir bandera centinela
+            esc.writeObject(new Bandera("X"));
+            esc.closeFile();
             
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    public void cargarBD(File fileBD) {
-        //lectura del fichero serializable o linea a linea
-        //for-banderasBD.put();
+    public void cargarBD(String fileBD) {
+        
+        try {
+            lec = new Lectura(fileBD);
+            Bandera bandera = (Bandera) lec.readObject();
+            while(!bandera.getNombrePais().equals("X")){
+                banderasBD.put(bandera.getNombrePais(),bandera);
+            }
+            lec.close();
+        } catch (IOException|ClassNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
     }
 
     @Override

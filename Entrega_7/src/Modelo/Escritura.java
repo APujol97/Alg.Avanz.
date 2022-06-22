@@ -5,8 +5,10 @@
  */
 package Modelo;
 
-import java.io.File;
-import java.io.RandomAccessFile;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 /**
  *
@@ -14,11 +16,18 @@ import java.io.RandomAccessFile;
  */
 public class Escritura {
     
-    public RandomAccessFile RAF;
-    public File fichero;
+    public ObjectOutputStream oos;
     
-    public Escritura(){
-        
+    public Escritura(String file) throws FileNotFoundException, IOException{
+        oos = new ObjectOutputStream(new FileOutputStream(file));
+    }
+    
+    public void writeObject(Object o) throws IOException{
+        oos.writeObject(o);
+    }
+    
+    public void closeFile() throws IOException{
+        oos.close();
     }
     
 }
