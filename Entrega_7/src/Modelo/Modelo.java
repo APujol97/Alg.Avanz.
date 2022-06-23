@@ -42,19 +42,19 @@ public class Modelo implements Eventos {
         prog = p;
         rdm = new Random();
         paleta = new Paleta();
-        
-        this.colores = new HashMap <> ();
-        colores.put("Blanco",0);
-        colores.put("Negro",0);
-        colores.put("Rojo",0);
-        colores.put("Verde",0);
-        colores.put("Azul",0);
-        colores.put("Amarillo",0);
-        colores.put("Naranja",0);
+
+        this.colores = new HashMap<>();
+        colores.put("Blanco", 0);
+        colores.put("Negro", 0);
+        colores.put("Rojo", 0);
+        colores.put("Verde", 0);
+        colores.put("Azul", 0);
+        colores.put("Amarillo", 0);
+        colores.put("Naranja", 0);
         paises = new ArrayList<>();
     }
-    
-    public Bandera procesarImagenBandera(BufferedImage img, int pixelesMuestreo){
+
+    public Bandera procesarImagenBandera(BufferedImage img, int pixelesMuestreo) {
         /*
         Procesar la imagen leída para devolver bandera con estimación del
         % de colores a partir de N pixeles, el profe recomendó 500px. 
@@ -63,35 +63,47 @@ public class Modelo implements Eventos {
         Este sería el primer algoritmo probabilístico, que devolvería 
         una bandera con diferente estimación de colores por cada ejecución 
         desde Control.java.
-        */
+         */
         String colorName;
         int height = img.getHeight();
         int width = img.getWidth();
         int pixelX, pixelY;
-        
-        for(int i = pixelesMuestreo; i > 0; i--){
-            pixelX = (int) ((double) (width)*rdm.nextDouble());
-            pixelY = (int) ((double) (height)*rdm.nextDouble());
-            colorName = paleta.getNombre(paleta.analizarColor(new Color(img.getRGB(pixelX, pixelY))));
-            colores.put(colorName,colores.get(colorName)+1);
+        Color col;
+
+        boolean hasAlpha = img.getAlphaRaster() != null;
+
+        for (int i = pixelesMuestreo; i > 0; i--) {
+            pixelX = (int) ((double) (width) * rdm.nextDouble());
+            pixelY = (int) ((double) (height) * rdm.nextDouble());
+            col = new Color(img.getRGB(pixelX, pixelY), hasAlpha);
+            
+            if (col.getAlpha() != 255) { //si no es totalmente transparente
+                colorName = paleta.getNombre(paleta.analizarColor(col));
+                colores.put(colorName, colores.get(colorName) + 1);
+            } else {
+                i++;
+            }
+
         }
-        
-        int area = width*height;
+
+        int area = width * height;
         int value;
         Bandera bandera = new Bandera();
-        
-        for(Map.Entry<String, Integer> entry : colores.entrySet()){
+
+        for (Map.Entry<String, Integer> entry : colores.entrySet()) {
             value = entry.getValue();
             //ponemos porcentaje
-            bandera.putColorValue(entry.getKey(),(double)(value)/(double)(area)*100.00);
+            bandera.putColorValue(entry.getKey(), (double) (value) / (double) (area) * 100.00);
         }
-        
-        colores.entrySet().forEach((entry) -> {entry.setValue(0);});
-        
+
+        colores.entrySet().forEach((entry) -> {
+            entry.setValue(0);
+        });
+
         return bandera;
     }
-    
-    public ArrayList<String> getNombreBanderaDeImagen(Bandera banderaIMG){
+
+    public ArrayList<String> getNombreBanderaDeImagen(Bandera banderaIMG) {
         /*
         Comparar los colores de la bandera por cada bandera en la BD.
         
@@ -106,37 +118,37 @@ public class Modelo implements Eventos {
         Este método se llamaría N veces desde Cntrol.java, el profe recomienda 5, 
         pues es el segundo algoritmo probabilístico, y recibe siempre una bandera
         diferente de lo devuelto en procesarImagenBandera().
-        */
-        
+         */
+
         Bandera banderaBD;
         double valueIMG, valueBD;
         int maxPoints = -1;
-        
-        for(Map.Entry<String, Bandera> banderaIter : banderasBD.entrySet()){
+
+        for (Map.Entry<String, Bandera> banderaIter : banderasBD.entrySet()) {
             banderaBD = banderaIter.getValue();
-            for(Map.Entry<String, Double> colorIter : banderaBD.getPaleta().entrySet()){
-                
+            for (Map.Entry<String, Double> colorIter : banderaBD.getPaleta().entrySet()) {
+
                 valueIMG = banderaIMG.getColorValue(colorIter.getKey());
                 valueBD = colorIter.getValue();
-                
-                if(valueIMG-valueBD >= -3.00 && valueIMG-valueBD <= 3.00){
+
+                if (valueIMG - valueBD >= -3.00 && valueIMG - valueBD <= 3.00) {
                     //sumar punto en banderBD
                     banderaBD.addPoint();
                 }
             }
             //calcular maxpoint aquí y cargar países candidatos
-            if(banderaBD.getPoints() > maxPoints){
+            if (banderaBD.getPoints() > maxPoints) {
                 paises.clear();
                 maxPoints = banderaBD.getPoints();
                 paises.add(banderaBD.getNombrePais());
-            } else if(banderaBD.getPoints() == maxPoints){
+            } else if (banderaBD.getPoints() == maxPoints) {
                 paises.add(banderaBD.getNombrePais());
             }
         }
-        
+
         ArrayList<String> paisesVar = paises;
         paises.clear();
-        
+
         return paisesVar;
     }
 
@@ -150,9 +162,9 @@ public class Modelo implements Eventos {
 //        int green = 0;
 //        int blue = 0;
         String colorName;
-        
+
         Bandera bandera = new Bandera(fichero);
-        
+
         //algoritmo tradicional de pixelado
         for (int pixelX = 0; pixelX < width; pixelX++) {
             for (int pixelY = 0; pixelY < height; pixelY++) {
@@ -161,26 +173,28 @@ public class Modelo implements Eventos {
 //                green = (rgb & 0xff) >> 8;
 //                blue = (rgb & 0xff);
                 colorName = paleta.getNombre(paleta.analizarColor(new Color(img.getRGB(pixelX, pixelY))));
-                colores.put(colorName,colores.get(colorName)+1);
+                colores.put(colorName, colores.get(colorName) + 1);
             }
         }
-        
-        int area = width*height;
+
+        int area = width * height;
         int value;
-        
-        for(Map.Entry<String, Integer> entry : colores.entrySet()){
+
+        for (Map.Entry<String, Integer> entry : colores.entrySet()) {
             value = entry.getValue();
             //ponemos porcentaje
-            bandera.putColorValue(entry.getKey(),(double)(value)/(double)(area)*100.00);
+            bandera.putColorValue(entry.getKey(), (double) (value) / (double) (area) * 100.00);
         }
-        
-        colores.entrySet().forEach((entry) -> {entry.setValue(0);});
-        
+
+        colores.entrySet().forEach((entry) -> {
+            entry.setValue(0);
+        });
+
         return bandera;
 
     }
-    
-    public void grabarBD(Bandera bandera){
+
+    public void grabarBD(Bandera bandera) {
         try {
             esc.writeObject(bandera);
         } catch (IOException ex) {
@@ -191,7 +205,7 @@ public class Modelo implements Eventos {
     public void crearBD(String fileBD) {
         // cargamos banderas en banderasBD mientras se crea???
         try {
-            
+
             String base = System.getProperty(Paths.get("").toAbsolutePath().toString() + "/flags");
             URL bandsIMG = getClass().getResource(base);
             BufferedImage bfImage;
@@ -208,25 +222,25 @@ public class Modelo implements Eventos {
             //escribir bandera centinela
             esc.writeObject(new Bandera("X"));
             esc.closeFile();
-            
+
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
 
     public void cargarBD(String fileBD) {
-        
+
         try {
             lec = new Lectura(fileBD);
             Bandera bandera = (Bandera) lec.readObject();
-            while(!bandera.getNombrePais().equals("X")){
-                banderasBD.put(bandera.getNombrePais(),bandera);
+            while (!bandera.getNombrePais().equals("X")) {
+                banderasBD.put(bandera.getNombrePais(), bandera);
             }
             lec.close();
-        } catch (IOException|ClassNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             System.out.println(ex.getMessage());
         }
-        
+
     }
 
     @Override
