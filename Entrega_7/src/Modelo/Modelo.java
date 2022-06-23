@@ -110,6 +110,7 @@ public class Modelo implements Eventos {
         
         Bandera banderaBD;
         double valueIMG, valueBD;
+        int maxPoints = -1;
         
         for(Map.Entry<String, Bandera> banderaIter : banderasBD.entrySet()){
             banderaBD = banderaIter.getValue();
@@ -123,12 +124,7 @@ public class Modelo implements Eventos {
                     banderaBD.addPoint();
                 }
             }
-        }
-        
-        int maxPoints = 0;
-        
-        for(Map.Entry<String, Bandera> banderaIter : banderasBD.entrySet()){
-            banderaBD = banderaIter.getValue();
+            //calcular maxpoint aquí y cargar países candidatos
             if(banderaBD.getPoints() > maxPoints){
                 paises.clear();
                 maxPoints = banderaBD.getPoints();
