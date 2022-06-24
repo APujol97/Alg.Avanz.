@@ -27,7 +27,8 @@ public class Control extends Thread implements Eventos {
     public void run() {
         try {
             //Solo hay un caso de ejecución contemplado de momento, que es el de analizar la imagen png aportada
-            switch(this.type) { 
+            System.out.println("FUNCIÓN NO IMPLEMENTADA");
+           /* switch(this.type) { 
                 case 1:
                     
                     break;
@@ -35,7 +36,7 @@ public class Control extends Thread implements Eventos {
                 case 2: 
                     
                     break;
-            }
+            }*/
         } catch (Exception ex) {
             Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
         }     
@@ -43,7 +44,7 @@ public class Control extends Thread implements Eventos {
     
     @Override
     public void notificar(String s) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.start();
     }
     
 }

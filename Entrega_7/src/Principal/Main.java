@@ -33,9 +33,9 @@ public class Main implements Eventos {
     private void inicio() throws IOException {
         mod = new Modelo(this);
         con = null;
-        //vis = new Vista("Entrega_7", this);
-        generarBD();
-        //vis.mostrar();
+        vis = new Vista("Entrega_7", this);
+        //generarBD();
+        vis.mostrar();
     }
     
     public static void main(String[] args) throws IOException {
@@ -61,7 +61,7 @@ public class Main implements Eventos {
      */
     @Override
     public void notificar(String s) {
-        if(s.startsWith("Detectar")) {
+        if(s.startsWith("Ejecutar")) {
             con = new Control(this);
             con.notificar(s); 
         } else if(s.startsWith("Corregir")) {
