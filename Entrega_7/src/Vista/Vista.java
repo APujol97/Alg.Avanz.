@@ -16,8 +16,8 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
@@ -30,7 +30,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 /**
@@ -40,9 +39,12 @@ import javax.swing.border.EmptyBorder;
 public class Vista extends JFrame implements ActionListener, Eventos {
 
     private Main prog;
-    private JTextField fileChooser;
+
     private JPanel panelImgSelect;
     private JPanel panelImgResul;
+    private String urlImagen;
+    private boolean condicion = false;
+    private int indice = 0;
 
     public Vista(String s, Main p) {
         super(s);
@@ -53,28 +55,38 @@ public class Vista extends JFrame implements ActionListener, Eventos {
         JPanel panelOpciones = new JPanel();
         panelOpciones.setLayout(new BoxLayout(panelOpciones, BoxLayout.X_AXIS));
 
-        JLabel fileLabel = new JLabel("Arrastra un archivo:");
-        fileLabel.setMaximumSize(new Dimension(130, 50));
+        JLabel fileLabel = new JLabel("Arrastra un archivo al cuadro izquierdo");
+        fileLabel.setMaximumSize(new Dimension(300, 25));
+        JButton botonEjecutar = new JButton("Ejecutar");
+        botonEjecutar.addActionListener(this);
 
-        fileChooser = new JTextField();
-        fileChooser.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                e.consume();
-            }
-        });
-        fileChooser.setMaximumSize(new Dimension(300, 25));
-        fileChooser.setDropTarget(new DropTarget() {
+        panelOpciones.setBorder(new EmptyBorder(10, 0, 0, 0));
+
+        panelOpciones.add(fileLabel);
+        panelOpciones.add(Box.createRigidArea(new Dimension(50, 0)));
+        panelOpciones.add(botonEjecutar);
+
+        JPanel panelImagenes = new JPanel();
+        panelImagenes.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panelImagenes.setLayout(new BoxLayout(panelImagenes, BoxLayout.X_AXIS));
+        panelImagenes.setMaximumSize(new Dimension(700, 500));
+
+        panelImgSelect = new JPanel();
+        panelImgSelect.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
+        panelImgSelect.setBackground(Color.white);
+        panelImgSelect.setDropTarget(new DropTarget() {
             @Override
             public synchronized void drop(DropTargetDropEvent evt) {
                 try {
                     evt.acceptDrop(DnDConstants.ACTION_COPY);
                     List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                     for (File file : droppedFiles) {
-                        fileChooser.setText(file.getPath());
 
+                        urlImagen = file.getPath();
                         //Creamos la imagen desde el fichero
                         File img = new File(file.getPath());
                         BufferedImage image = ImageIO.read(img);
+                        prog.getModel().setImagenElegida(image);
 
                         //La transformamos en un ImageniCON y la redimensionameos
                         ImageIcon picLabel = new ImageIcon(image);
@@ -82,6 +94,7 @@ public class Vista extends JFrame implements ActionListener, Eventos {
 
                         //Creamos la etiqueta para ponerla en el jlabel
                         JLabel etiImg = new JLabel();
+                        etiImg.setOpaque(true);
                         etiImg.setSize(panelImgSelect.getWidth(), panelImgSelect.getHeight());
                         etiImg.setIcon(picLabel);
 
@@ -95,28 +108,40 @@ public class Vista extends JFrame implements ActionListener, Eventos {
             }
         });
 
-        JButton botonEjecutar = new JButton("Ejecutar");
-        botonEjecutar.addActionListener(this);
-
-        panelOpciones.setBorder(new EmptyBorder(10, 0, 0, 0));
-        panelOpciones.add(fileLabel);
-        
-        panelOpciones.add(fileChooser);
-        panelOpciones.add(Box.createRigidArea(new Dimension(50, 0)));
-        panelOpciones.add(botonEjecutar);
-
-        JPanel panelImagenes = new JPanel();
-        panelImagenes.setBorder(new EmptyBorder(10, 10, 10, 10));
-        panelImagenes.setLayout(new BoxLayout(panelImagenes, BoxLayout.X_AXIS));
-        panelImagenes.setMaximumSize(new Dimension(700, 500));
-
-        panelImgSelect = new JPanel();
-        panelImgSelect.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black));
-        panelImgSelect.setBackground(Color.white);
-        
         panelImgResul = new JPanel();
-        panelImgResul.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black));
+        panelImgResul.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
         panelImgResul.setBackground(Color.white);
+
+        panelImgResul.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent me) {
+
+                if (condicion) {
+
+                    try {
+                       pintar();
+                    } catch (Exception ex) {
+                        System.out.println("ERROR EN LA FUNCION CLICK");
+                    }
+                }else{System.out.println("Aun no puedes");}
+            }
+
+            @Override
+            public void mousePressed(MouseEvent me) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent me) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent me) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent me) {
+            }
+        });
 
         panelImagenes.add(panelImgSelect);
         panelImagenes.add(Box.createRigidArea(new Dimension(25, 0)));
@@ -144,12 +169,17 @@ public class Vista extends JFrame implements ActionListener, Eventos {
 
     @Override
     public void notificar(String s) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (s.startsWith("Pinta")) {
+            
+            condicion = true;
+            pintar();
+
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if ("".equals(this.fileChooser.getText())) {
+        if ("".equals(urlImagen)) {
             System.out.println("NO IMAGEN SELECCIONADA");
         } else {
             String comanda = e.toString();
@@ -159,5 +189,36 @@ public class Vista extends JFrame implements ActionListener, Eventos {
 
         }
     }
+
+    public void pintar() {
+        
+        
+        try {
+            File img = new File("flags/" + prog.getModel().getNombre(indice));
+            BufferedImage image = ImageIO.read(img);
+
+            //La transformamos en un ImageniCON y la redimensionameos
+            ImageIcon picLabel = new ImageIcon(image);
+            picLabel.setImage(picLabel.getImage().getScaledInstance(panelImgResul.getWidth(), panelImgResul.getHeight(), Image.SCALE_SMOOTH));
+
+            //Creamos la etiqueta para ponerla en el jlabel
+            JLabel etiImg = new JLabel();
+            etiImg.setOpaque(true);
+            etiImg.setSize(panelImgResul.getWidth(), panelImgResul.getHeight());
+            etiImg.setIcon(picLabel);
+            
+
+            panelImgResul.add(etiImg);
+            panelImgResul.repaint();
+
+            indice++;
+            if (indice == prog.getModel().getLonguitud()) {
+                indice = 0;
+            }
+        } catch (Exception ex) {
+            System.out.println("ERROR EN LA FUNCION PINTAR");
+        }
+    }
+    
 
 }

@@ -12,14 +12,11 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -37,6 +34,9 @@ public class Modelo implements Eventos {
     private Random rdm;
     private Escritura esc;
     private Lectura lec;
+    private BufferedImage imagenElegida;
+    private HashMap<String, Integer> hashSolucion;
+    private ArrayList<Nodo> solucionFinal;
 
     public Modelo(Main p) {
         prog = p;
@@ -76,8 +76,8 @@ public class Modelo implements Eventos {
             pixelX = (int) ((double) (width) * rdm.nextDouble());
             pixelY = (int) ((double) (height) * rdm.nextDouble());
             col = new Color(img.getRGB(pixelX, pixelY), hasAlpha);
-            
-            if (col.getAlpha() != 255) { //si no es totalmente transparente
+
+            if (col.getAlpha() != 0) { //si no es totalmente transparente
                 colorName = paleta.getNombre(paleta.analizarColor(col));
                 colores.put(colorName, colores.get(colorName) + 1);
             } else {
@@ -86,14 +86,14 @@ public class Modelo implements Eventos {
 
         }
 
-        int area = width * height;
         int value;
         Bandera bandera = new Bandera();
 
         for (Map.Entry<String, Integer> entry : colores.entrySet()) {
             value = entry.getValue();
             //ponemos porcentaje
-            bandera.putColorValue(entry.getKey(), (double) (value) / (double) (area) * 100.00);
+            double aux = (double) value / pixelesMuestreo;
+            bandera.putColorValue(entry.getKey(), aux * 100.00);
         }
 
         colores.entrySet().forEach((entry) -> {
@@ -120,17 +120,17 @@ public class Modelo implements Eventos {
         diferente de lo devuelto en procesarImagenBandera().
          */
 
+        paises.clear();
         Bandera banderaBD;
         double valueIMG, valueBD;
         int maxPoints = -1;
-
+        int aux = 0;
         for (Map.Entry<String, Bandera> banderaIter : banderasBD.entrySet()) {
             banderaBD = banderaIter.getValue();
-            for (Map.Entry<String, Double> colorIter : banderaBD.getPaleta().entrySet()) {
 
+            for (Map.Entry<String, Double> colorIter : banderaBD.getPaleta().entrySet()) {
                 valueIMG = banderaIMG.getColorValue(colorIter.getKey());
                 valueBD = colorIter.getValue();
-
                 if (valueIMG - valueBD >= -3.00 && valueIMG - valueBD <= 3.00) {
                     //sumar punto en banderBD
                     banderaBD.addPoint();
@@ -144,12 +144,12 @@ public class Modelo implements Eventos {
             } else if (banderaBD.getPoints() == maxPoints) {
                 paises.add(banderaBD.getNombrePais());
             }
+            aux++;
+            // System.out.println("Bandera procesada " + aux + "de 196");
+
         }
 
-        ArrayList<String> paisesVar = paises;
-        paises.clear();
-
-        return paisesVar;
+        return paises;
     }
 
     public Bandera procesarBD(BufferedImage img, String fichero) {
@@ -206,18 +206,25 @@ public class Modelo implements Eventos {
         // cargamos banderas en banderasBD mientras se crea???
         try {
 
-            String base = System.getProperty(Paths.get("").toAbsolutePath().toString() + "/flags");
-            URL bandsIMG = getClass().getResource(base);
+            String base = "flags/";
+
             BufferedImage bfImage;
-            File dir = new File(bandsIMG.toURI());
+            File dir = new File(base);
             String[] ficheros = dir.list();
             Bandera bandera;
             esc = new Escritura(fileBD);
+            banderasBD = new HashMap<>();
+            int aux = 0;
+            int longuitud = ficheros.length;
             for (String fichero : ficheros) {
+
                 bfImage = ImageIO.read(new File(base + fichero));
                 bandera = procesarBD(bfImage, fichero);
                 grabarBD(bandera); //escribir bandera en fichero;
                 banderasBD.put(bandera.getNombrePais(), bandera); //cargamos en BD a la vez
+                aux++;
+                System.out.println("bandera creada " + aux + " de " + longuitud);
+
             }
             //escribir bandera centinela
             esc.writeObject(new Bandera("X"));
@@ -232,9 +239,16 @@ public class Modelo implements Eventos {
 
         try {
             lec = new Lectura(fileBD);
+            if (banderasBD == null) {
+                banderasBD = new HashMap<>();
+            } else {
+                banderasBD.clear();
+            }
+
             Bandera bandera = (Bandera) lec.readObject();
             while (!bandera.getNombrePais().equals("X")) {
                 banderasBD.put(bandera.getNombrePais(), bandera);
+                bandera = (Bandera) lec.readObject();
             }
             lec.close();
         } catch (IOException | ClassNotFoundException ex) {
@@ -243,10 +257,63 @@ public class Modelo implements Eventos {
 
     }
 
+    //función que hay que rotocar seguro pero de momento se queda asi porque me da pereza encontrar otra forma
+    //hago esto para que se puedan ver diferente banderas seleccionadas
+    public void deteccionBandera() {
+
+        Bandera bandera;
+        ArrayList<String> paisesSimilares;
+        String nombre = "";
+        int valor;
+        hashSolucion = new HashMap<>();
+        solucionFinal = new ArrayList<>();
+        System.out.println("Vamos a hcar el monte carlo");
+        for (int i = 0; i < 5; i++) {
+            bandera = procesarImagenBandera(imagenElegida, 500);
+            paisesSimilares = getNombreBanderaDeImagen(bandera);
+            for (int j = 0; j < paisesSimilares.size(); j++) {
+                nombre = paisesSimilares.get(j);
+                if (hashSolucion.containsKey(nombre)) {
+                    valor = hashSolucion.get(nombre) + 1;
+                    hashSolucion.put(nombre, valor);
+                } else {
+                    hashSolucion.put(nombre, 0);
+                }
+
+            }
+        }
+        
+        System.out.println("recorremos el hashmap");
+
+        for (Map.Entry<String, Integer> iterador : hashSolucion.entrySet()) {
+
+            Nodo nodo = new Nodo(iterador.getKey(), iterador.getValue());
+            solucionFinal.add(nodo);
+        }
+        solucionFinal.sort((t, t1) -> {
+            return t.getValor() - t1.getValor(); //To change body of generated lambdas, choose Tools | Templates.
+        });
+        prog.getView().notificar("Pintar");
+
+    }
+
+    public String getNombre(int i) {
+
+        return solucionFinal.get(i).getNombre();
+    }
+
+    public int getLonguitud() {
+        return solucionFinal.size();
+    }
+
     @Override
     public void notificar(String s) {
         throw new UnsupportedOperationException("Not supported yet.");
 
+    }
+
+    public void setImagenElegida(BufferedImage imagenElegida) {
+        this.imagenElegida = imagenElegida;
     }
 
 }

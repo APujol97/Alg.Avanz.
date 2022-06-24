@@ -8,11 +8,7 @@ package Principal;
 import Control.Control;
 import Modelo.Modelo;
 import Vista.Vista;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -34,7 +30,7 @@ public class Main implements Eventos {
         mod = new Modelo(this);
         con = null;
         vis = new Vista("Entrega_7", this);
-        //generarBD();
+        generarBD();
         vis.mostrar();
     }
     
@@ -64,10 +60,7 @@ public class Main implements Eventos {
         if(s.startsWith("Ejecutar")) {
             con = new Control(this);
             con.notificar(s); 
-        } else if(s.startsWith("Corregir")) {
-            con = new Control(this);
-            con.notificar(s); 
-        } 
+        }
     }
 
     /*
