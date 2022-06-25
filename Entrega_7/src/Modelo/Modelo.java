@@ -131,7 +131,7 @@ public class Modelo implements Eventos {
             for (Map.Entry<String, Double> colorIter : banderaBD.getPaleta().entrySet()) {
                 valueIMG = banderaIMG.getColorValue(colorIter.getKey());
                 valueBD = colorIter.getValue();
-                if (valueIMG - valueBD >= -3.00 && valueIMG - valueBD <= 3.00) {
+                if (valueIMG - valueBD >= -5.00 && valueIMG - valueBD <= 5.00) {
                     //sumar punto en banderBD
                     banderaBD.addPoint();
                 }
@@ -223,8 +223,8 @@ public class Modelo implements Eventos {
                 grabarBD(bandera); //escribir bandera en fichero;
                 banderasBD.put(bandera.getNombrePais(), bandera); //cargamos en BD a la vez
                 aux++;
-                System.out.println("bandera creada " + aux + " de " + longuitud);
-
+                //System.out.println("bandera creada " + aux + " de " + longuitud);
+                System.out.println(bandera.toString());
             }
             //escribir bandera centinela
             esc.writeObject(new Bandera("X"));
@@ -253,6 +253,7 @@ public class Modelo implements Eventos {
             lec.close();
         } catch (IOException | ClassNotFoundException ex) {
             System.out.println(ex.getMessage());
+           
         }
 
     }
@@ -267,9 +268,11 @@ public class Modelo implements Eventos {
         int valor;
         hashSolucion = new HashMap<>();
         solucionFinal = new ArrayList<>();
-        System.out.println("Vamos a hcar el monte carlo");
+        
+
         for (int i = 0; i < 5; i++) {
             bandera = procesarImagenBandera(imagenElegida, 500);
+            System.out.println(bandera);
             paisesSimilares = getNombreBanderaDeImagen(bandera);
             for (int j = 0; j < paisesSimilares.size(); j++) {
                 nombre = paisesSimilares.get(j);
@@ -282,8 +285,8 @@ public class Modelo implements Eventos {
 
             }
         }
+
         
-        System.out.println("recorremos el hashmap");
 
         for (Map.Entry<String, Integer> iterador : hashSolucion.entrySet()) {
 
@@ -291,8 +294,14 @@ public class Modelo implements Eventos {
             solucionFinal.add(nodo);
         }
         solucionFinal.sort((t, t1) -> {
-            return t.getValor() - t1.getValor(); //To change body of generated lambdas, choose Tools | Templates.
+            return t1.getValor() - t.getValor(); //To change body of generated lambdas, choose Tools | Templates.
         });
+        System.out.println(solucionFinal.toString());
+        
+         banderasBD.entrySet().forEach((entry) -> {
+            entry.getValue().setPoints(0);
+        });
+         
         prog.getView().notificar("Pintar");
 
     }

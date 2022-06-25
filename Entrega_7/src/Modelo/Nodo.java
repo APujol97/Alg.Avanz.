@@ -19,6 +19,11 @@ public class Nodo {
         this.valor = valor;
     }
 
+    @Override
+    public String toString() {
+        return "Nodo{" + "nombre=" + nombre + ", valor=" + valor + '}';
+    }
+
    
    
     public String getNombre() {

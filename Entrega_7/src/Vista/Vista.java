@@ -9,6 +9,7 @@ import Principal.Eventos;
 import Principal.Main;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
@@ -18,6 +19,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
@@ -74,6 +77,7 @@ public class Vista extends JFrame implements ActionListener, Eventos {
         panelImgSelect = new JPanel();
         panelImgSelect.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
         panelImgSelect.setBackground(Color.white);
+
         panelImgSelect.setDropTarget(new DropTarget() {
             @Override
             public synchronized void drop(DropTargetDropEvent evt) {
@@ -83,15 +87,20 @@ public class Vista extends JFrame implements ActionListener, Eventos {
                     for (File file : droppedFiles) {
 
                         urlImagen = file.getPath();
+                        System.out.println(urlImagen);
                         //Creamos la imagen desde el fichero
                         File img = new File(file.getPath());
                         BufferedImage image = ImageIO.read(img);
                         prog.getModel().setImagenElegida(image);
 
+                        Image redInput = new AffineTransformOp(
+                                AffineTransform.getScaleInstance((double) panelImgSelect.getWidth() / image.getWidth(), (double) panelImgSelect.getHeight() / image.getHeight()),
+                                AffineTransformOp.TYPE_BICUBIC).filter(image, null);
                         //La transformamos en un ImageniCON y la redimensionameos
-                        ImageIcon picLabel = new ImageIcon(image);
-                        picLabel.setImage(picLabel.getImage().getScaledInstance(panelImgSelect.getWidth(), panelImgSelect.getHeight(), Image.SCALE_SMOOTH));
 
+                        ImageIcon picLabel = new ImageIcon(redInput, img.toString());
+
+                        picLabel.setImage(picLabel.getImage().getScaledInstance(panelImgSelect.getWidth(), panelImgSelect.getHeight(), Image.SCALE_SMOOTH));
                         //Creamos la etiqueta para ponerla en el jlabel
                         JLabel etiImg = new JLabel();
                         etiImg.setOpaque(true);
@@ -119,11 +128,13 @@ public class Vista extends JFrame implements ActionListener, Eventos {
                 if (condicion) {
 
                     try {
-                       pintar();
+                        pintar();
                     } catch (Exception ex) {
                         System.out.println("ERROR EN LA FUNCION CLICK");
                     }
-                }else{System.out.println("Aun no puedes");}
+                } else {
+                    System.out.println("Aun no puedes");
+                }
             }
 
             @Override
@@ -170,8 +181,8 @@ public class Vista extends JFrame implements ActionListener, Eventos {
     @Override
     public void notificar(String s) {
         if (s.startsWith("Pinta")) {
-            
             condicion = true;
+            indice = 0;
             pintar();
 
         }
@@ -191,26 +202,29 @@ public class Vista extends JFrame implements ActionListener, Eventos {
     }
 
     public void pintar() {
-        
-        
+
         try {
+            // System.out.println(prog.getModel().getNombre(indice));
+            
             File img = new File("flags/" + prog.getModel().getNombre(indice));
             BufferedImage image = ImageIO.read(img);
 
             //La transformamos en un ImageniCON y la redimensionameos
-            ImageIcon picLabel = new ImageIcon(image);
+            Image redInput = new AffineTransformOp(
+                    AffineTransform.getScaleInstance((double) panelImgResul.getWidth() / image.getWidth(), (double) panelImgResul.getHeight() / image.getHeight()),
+                    AffineTransformOp.TYPE_BICUBIC).filter(image, null);
+            //La transformamos en un ImageniCON y la redimensionameos
+            ImageIcon picLabel = new ImageIcon(redInput, img.toString());
             picLabel.setImage(picLabel.getImage().getScaledInstance(panelImgResul.getWidth(), panelImgResul.getHeight(), Image.SCALE_SMOOTH));
-
             //Creamos la etiqueta para ponerla en el jlabel
             JLabel etiImg = new JLabel();
             etiImg.setOpaque(true);
             etiImg.setSize(panelImgResul.getWidth(), panelImgResul.getHeight());
             etiImg.setIcon(picLabel);
-            
 
             panelImgResul.add(etiImg);
             panelImgResul.repaint();
-
+            //    System.out.println(indice + " de " + prog.getModel().getLonguitud());
             indice++;
             if (indice == prog.getModel().getLonguitud()) {
                 indice = 0;
@@ -219,6 +233,5 @@ public class Vista extends JFrame implements ActionListener, Eventos {
             System.out.println("ERROR EN LA FUNCION PINTAR");
         }
     }
-    
 
 }

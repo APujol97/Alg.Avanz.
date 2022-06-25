@@ -27,6 +27,7 @@ public class Bandera implements Serializable {
         colores.put("Azul",0.0);
         colores.put("Amarillo",0.0);
         colores.put("Naranja",0.0);
+         this.points = 0;
     }
     
     public Bandera(String pais){
@@ -57,6 +58,10 @@ public class Bandera implements Serializable {
     public int getPoints(){
         return this.points;
     }
+    public void setPoints(int i){
+    
+    this.points=i;
+    }
     
     public void putColorValue(String color, double value){
         this.colores.put(color, value);
@@ -65,7 +70,12 @@ public class Bandera implements Serializable {
     public double getColorValue(String color){
         return this.colores.get(color);
     }
+
+    @Override
+    public String toString() {
+        return "Bandera{" + "nombrePais=" + nombrePais + ", colores=" + colores + '}'+"\n";
+    }
     
-    //método ToString()???
+
     
 }
