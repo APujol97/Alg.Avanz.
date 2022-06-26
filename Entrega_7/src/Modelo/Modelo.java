@@ -26,9 +26,8 @@ public class Modelo implements Eventos {
 
     private Main prog;
     private Paleta paleta;
-    private HashMap<String, Integer> colores;
-    //hash para cada bandera en la BD y que contenga los puntos
-    private HashMap<String, Bandera> banderasBD;
+    private HashMap<String, Integer> colores; //map variable <Nombre-color, Num.pixeles>
+    private HashMap<String, Bandera> banderasBD; //hash para cada bandera en la BD y que contenga los puntos
     private ArrayList<String> paises;
     private Random rdm;
     private Escritura esc;
@@ -185,7 +184,6 @@ public class Modelo implements Eventos {
                 bandera = procesarBD(bfImage, fichero);
                 grabarBD(bandera); //escribe bandera en fichero;
                 banderasBD.put(bandera.getNombrePais(), bandera); //cargamos en BD a la vez
-                System.out.println(bandera.toString());
             }
             //escribir bandera centinela
             esc.writeObject(new Bandera("X"));
@@ -219,7 +217,7 @@ public class Modelo implements Eventos {
 
     }
 
-    //función que permite ver diferente banderas seleccionadas
+    //función que permite ver diferentes banderas seleccionadas
     public void deteccionBandera() {
 
         Bandera bandera;
@@ -232,7 +230,6 @@ public class Modelo implements Eventos {
 
         for (int i = 0; i < 5; i++) {
             bandera = procesarImagenBandera(imagenElegida, 500);
-            System.out.println(bandera);
             paisesSimilares = getNombreBanderaDeImagen(bandera);
             for (int j = 0; j < paisesSimilares.size(); j++) {
                 nombre = paisesSimilares.get(j);
@@ -254,7 +251,6 @@ public class Modelo implements Eventos {
         solucionFinal.sort((t, t1) -> {
             return t1.getValor() - t.getValor();
         });
-        System.out.println(solucionFinal.toString());
         
          banderasBD.entrySet().forEach((entry) -> {
             entry.getValue().setPoints(0);
