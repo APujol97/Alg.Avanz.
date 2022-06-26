@@ -224,6 +224,7 @@ public class Vista extends JFrame implements ActionListener, Eventos {
             etiImg.setIcon(picLabel);
 
             panelImgResul.add(etiImg);
+            panelImgResul.repaint();
             indice++;
             if (indice == prog.getModel().getLonguitud()) {
                 indice = 0;

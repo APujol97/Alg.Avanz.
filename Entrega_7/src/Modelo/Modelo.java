@@ -35,6 +35,9 @@ public class Modelo implements Eventos {
     private BufferedImage imagenElegida;
     private HashMap<String, Integer> hashSolucion;
     private ArrayList<Nodo> solucionFinal;
+    private final int pixelesMuestreo = 1000; 
+    private final int numIteraciones = 10;
+    private final double margen = 5.00;
 
     public Modelo(Main p) {
         prog = p;
@@ -56,16 +59,20 @@ public class Modelo implements Eventos {
     public Bandera procesarImagenBandera(BufferedImage img, int pixelesMuestreo) {
 
         String colorName;
-        int height = img.getHeight();
-        int width = img.getWidth();
+        int ladoXCentro = (img.getWidth() );
+        int ladoYCentro = (img.getHeight());
+        int yCentral = (img.getHeight() / 2) - (ladoYCentro / 2);
+        int xCentral = (img.getWidth() / 2) - (ladoXCentro / 2);
+
         int pixelX, pixelY;
         Color col;
 
         boolean hasAlpha = img.getAlphaRaster() != null;
 
         for (int i = pixelesMuestreo; i > 0; i--) {
-            pixelX = (int) ((double) (width) * rdm.nextDouble());
-            pixelY = (int) ((double) (height) * rdm.nextDouble());
+            pixelX = (int) (xCentral + ((double) (ladoXCentro) * rdm.nextDouble()));
+            pixelY = (int) (yCentral + ((double) (ladoYCentro) * rdm.nextDouble()));
+
             col = new Color(img.getRGB(pixelX, pixelY), hasAlpha);
 
             if (col.getAlpha() != 0) { //si no es totalmente transparente
@@ -107,7 +114,7 @@ public class Modelo implements Eventos {
             for (Map.Entry<String, Double> colorIter : banderaBD.getPaleta().entrySet()) {
                 valueIMG = banderaIMG.getColorValue(colorIter.getKey());
                 valueBD = colorIter.getValue();
-                if (valueIMG - valueBD >= -5.00 && valueIMG - valueBD <= 5.00) {
+                if (valueIMG - valueBD >= -margen && valueIMG - valueBD <= margen) {
                     //suma punto en banderBD
                     banderaBD.addPoint();
                 }
@@ -167,7 +174,7 @@ public class Modelo implements Eventos {
 
     // cargamos banderas en banderasBD mientras se crea
     public void crearBD(String fileBD) {
-        
+
         try {
 
             String base = "flags/";
@@ -212,7 +219,7 @@ public class Modelo implements Eventos {
             lec.close();
         } catch (IOException | ClassNotFoundException ex) {
             System.out.println(ex.getMessage());
-           
+
         }
 
     }
@@ -223,14 +230,15 @@ public class Modelo implements Eventos {
         Bandera bandera;
         ArrayList<String> paisesSimilares;
         String nombre = "";
-        int valor;
+        int valor = 0;
         hashSolucion = new HashMap<>();
         solucionFinal = new ArrayList<>();
-        
+        int maxpoint = 0;
+
         //algoritmo Montecarlo -> 5 veces
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < numIteraciones; i++) {
             //se genera bandera con algoritmo numérico analizando 500 píxeles
-            bandera = procesarImagenBandera(imagenElegida, 500);
+            bandera = procesarImagenBandera(imagenElegida, pixelesMuestreo);
             //se obtiene lista de países candidatos
             paisesSimilares = getNombreBanderaDeImagen(bandera);
             //sepuntúa repetición de países
@@ -242,24 +250,33 @@ public class Modelo implements Eventos {
                 } else {
                     hashSolucion.put(nombre, 0);
                 }
-
+                if (valor > maxpoint) {
+                    maxpoint = valor;
+                }
             }
         }
+
+        System.out.println(valor + " " + maxpoint);
+        System.out.println(hashSolucion.toString());
 
         //se genera lista de países candidatos en orden descendiente para pintar en la vista
         for (Map.Entry<String, Integer> iterador : hashSolucion.entrySet()) {
 
-            Nodo nodo = new Nodo(iterador.getKey(), iterador.getValue());
-            solucionFinal.add(nodo);
+            if (maxpoint == iterador.getValue()) {
+                Nodo nodo = new Nodo(iterador.getKey(), iterador.getValue());
+                solucionFinal.add(nodo);
+            }
         }
-        solucionFinal.sort((t, t1) -> {
-            return t1.getValor() - t.getValor();
-        });
-        
-         banderasBD.entrySet().forEach((entry) -> {
+//        solucionFinal.sort((t, t1) -> {
+//            return t1.getValor() - t.getValor();
+//        });
+
+        System.out.println(solucionFinal.toString());
+
+        banderasBD.entrySet().forEach((entry) -> {
             entry.getValue().setPoints(0);
         });
-         
+
         prog.getView().notificar("Pintar");
 
     }
