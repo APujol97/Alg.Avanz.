@@ -38,6 +38,8 @@ public class Modelo implements Eventos {
     private final int pixelesMuestreo = 1000; 
     private final int numIteraciones = 10;
     private final double margen = 5.00;
+    
+    private int totBar = 0;
 
     public Modelo(Main p) {
         prog = p;
@@ -182,16 +184,21 @@ public class Modelo implements Eventos {
             BufferedImage bfImage;
             File dir = new File(base);
             String[] ficheros = dir.list();
+            totBar = ficheros.length;
+            prog.getView().progressBar();
             Bandera bandera;
             esc = new Escritura(fileBD);
             banderasBD = new HashMap<>();
+            int percentBar = 0;
             for (String fichero : ficheros) {
-
                 bfImage = ImageIO.read(new File(base + fichero));
                 bandera = procesarBD(bfImage, fichero);
                 grabarBD(bandera); //escribe bandera en fichero;
                 banderasBD.put(bandera.getNombrePais(), bandera); //cargamos en BD a la vez
+                percentBar++;
+                prog.getView().getPb().actualizarBarra(percentBar);
             }
+            prog.getView().getPb().setVisible(false);
             //escribir bandera centinela
             esc.writeObject(new Bandera("X"));
             esc.closeFile();
@@ -292,4 +299,10 @@ public class Modelo implements Eventos {
         this.imagenElegida = imagenElegida;
     }
 
+
+    public int getTotBar() {
+        return totBar;
+    }
+
+    
 }
