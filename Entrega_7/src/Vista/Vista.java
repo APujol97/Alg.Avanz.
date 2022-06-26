@@ -47,6 +47,7 @@ public class Vista extends JFrame implements ActionListener, Eventos {
     private String urlImagen;
     private boolean condicion = false;
     private int indice = 0;
+    private ProgressBar pb;
 
     public Vista(String s, Main p) {
         super(s);
@@ -178,6 +179,9 @@ public class Vista extends JFrame implements ActionListener, Eventos {
         this.revalidate();
         this.repaint();
     }
+    public void progressBar(){
+        pb = new ProgressBar(prog);
+    }
 
     @Override
     public void notificar(String s) {
@@ -234,4 +238,9 @@ public class Vista extends JFrame implements ActionListener, Eventos {
         }
     }
 
+    public ProgressBar getPb() {
+        return pb;
+    }
+
+    
 }
