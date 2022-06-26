@@ -6,7 +6,6 @@
 package Vista;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -19,7 +18,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author Usuario
+ * @author Joan Alcover, Alejandro Fluixà, Francisco Muñoz, Antonio Pujol
  */
 public class PanelDibujo extends JPanel {
 

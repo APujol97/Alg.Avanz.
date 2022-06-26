@@ -9,7 +9,6 @@ import Principal.Eventos;
 import Principal.Main;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
@@ -88,7 +87,8 @@ public class Vista extends JFrame implements ActionListener, Eventos {
 
                         urlImagen = file.getPath();
                         System.out.println(urlImagen);
-                        //Creamos la imagen desde el fichero
+                        
+                        //Se crea la imagen desde el fichero
                         File img = new File(file.getPath());
                         BufferedImage image = ImageIO.read(img);
                         prog.getModel().setImagenElegida(image);
@@ -96,12 +96,13 @@ public class Vista extends JFrame implements ActionListener, Eventos {
                         Image redInput = new AffineTransformOp(
                                 AffineTransform.getScaleInstance((double) panelImgSelect.getWidth() / image.getWidth(), (double) panelImgSelect.getHeight() / image.getHeight()),
                                 AffineTransformOp.TYPE_BICUBIC).filter(image, null);
-                        //La transformamos en un ImageniCON y la redimensionameos
-
+                        
+                        //Se transforma en un ImagenIcon y la redimensionamos
                         ImageIcon picLabel = new ImageIcon(redInput, img.toString());
 
                         picLabel.setImage(picLabel.getImage().getScaledInstance(panelImgSelect.getWidth(), panelImgSelect.getHeight(), Image.SCALE_SMOOTH));
-                        //Creamos la etiqueta para ponerla en el jlabel
+                        
+                        //Creamos la etiqueta para ponerla en el jLabel
                         JLabel etiImg = new JLabel();
                         etiImg.setOpaque(true);
                         etiImg.setSize(panelImgSelect.getWidth(), panelImgSelect.getHeight());
@@ -204,27 +205,25 @@ public class Vista extends JFrame implements ActionListener, Eventos {
     public void pintar() {
 
         try {
-            // System.out.println(prog.getModel().getNombre(indice));
             
             File img = new File("flags/" + prog.getModel().getNombre(indice));
             BufferedImage image = ImageIO.read(img);
 
-            //La transformamos en un ImageniCON y la redimensionameos
             Image redInput = new AffineTransformOp(
                     AffineTransform.getScaleInstance((double) panelImgResul.getWidth() / image.getWidth(), (double) panelImgResul.getHeight() / image.getHeight()),
                     AffineTransformOp.TYPE_BICUBIC).filter(image, null);
-            //La transformamos en un ImageniCON y la redimensionameos
+            
+            //La transformamos en un ImagenIcon y la redimensionameos
             ImageIcon picLabel = new ImageIcon(redInput, img.toString());
             picLabel.setImage(picLabel.getImage().getScaledInstance(panelImgResul.getWidth(), panelImgResul.getHeight(), Image.SCALE_SMOOTH));
-            //Creamos la etiqueta para ponerla en el jlabel
+            
+            //Creamos la etiqueta para ponerla en el jLabel
             JLabel etiImg = new JLabel();
             etiImg.setOpaque(true);
             etiImg.setSize(panelImgResul.getWidth(), panelImgResul.getHeight());
             etiImg.setIcon(picLabel);
 
             panelImgResul.add(etiImg);
-            panelImgResul.repaint();
-            //    System.out.println(indice + " de " + prog.getModel().getLonguitud());
             indice++;
             if (indice == prog.getModel().getLonguitud()) {
                 indice = 0;

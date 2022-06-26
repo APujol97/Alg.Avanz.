@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Random;
 import javax.imageio.ImageIO;
 
@@ -54,16 +53,9 @@ public class Modelo implements Eventos {
         paises = new ArrayList<>();
     }
 
+    // Procesar la imagen leída para devolver bandera con estimación del % de colores a partir de N pixeles
     public Bandera procesarImagenBandera(BufferedImage img, int pixelesMuestreo) {
-        /*
-        Procesar la imagen leída para devolver bandera con estimación del
-        % de colores a partir de N pixeles, el profe recomendó 500px. 
-        Quizás un porcentaje es mejor
-        
-        Este sería el primer algoritmo probabilístico, que devolvería 
-        una bandera con diferente estimación de colores por cada ejecución 
-        desde Control.java.
-         */
+
         String colorName;
         int height = img.getHeight();
         int width = img.getWidth();
@@ -103,28 +95,13 @@ public class Modelo implements Eventos {
         return bandera;
     }
 
+    //Comparar los colores de la bandera por cada bandera en la BD.
     public ArrayList<String> getNombreBanderaDeImagen(Bandera banderaIMG) {
-        /*
-        Comparar los colores de la bandera por cada bandera en la BD.
-        
-        En cada iteración comparamos los colores de banderaIMG con los de
-        una bandera de banderasBD. si para ese color la diferencia está entre
-        el 3.00%, se suma un punto a banderasBD.put(esta_bandera, value+1), y así
-        con todas las banderas de banderaBD. Una vez acabado se coge la o las que
-        más puntos tiene y esa es la que se devuelve el país.
-        
-        Lo del 3.00% de diferencia lo comentó el profe como buena heurística
-        
-        Este método se llamaría N veces desde Cntrol.java, el profe recomienda 5, 
-        pues es el segundo algoritmo probabilístico, y recibe siempre una bandera
-        diferente de lo devuelto en procesarImagenBandera().
-         */
 
         paises.clear();
         Bandera banderaBD;
         double valueIMG, valueBD;
         int maxPoints = -1;
-        int aux = 0;
         for (Map.Entry<String, Bandera> banderaIter : banderasBD.entrySet()) {
             banderaBD = banderaIter.getValue();
 
@@ -132,35 +109,26 @@ public class Modelo implements Eventos {
                 valueIMG = banderaIMG.getColorValue(colorIter.getKey());
                 valueBD = colorIter.getValue();
                 if (valueIMG - valueBD >= -5.00 && valueIMG - valueBD <= 5.00) {
-                    //sumar punto en banderBD
+                    //suma punto en banderBD
                     banderaBD.addPoint();
                 }
             }
-            //calcular maxpoint aquí y cargar países candidatos
+            //calcula maxpoint aquí y cargar países candidatos
             if (banderaBD.getPoints() > maxPoints) {
                 paises.clear();
                 maxPoints = banderaBD.getPoints();
                 paises.add(banderaBD.getNombrePais());
             } else if (banderaBD.getPoints() == maxPoints) {
                 paises.add(banderaBD.getNombrePais());
-            }
-            aux++;
-            // System.out.println("Bandera procesada " + aux + "de 196");
-
+            };
         }
 
         return paises;
     }
 
     public Bandera procesarBD(BufferedImage img, String fichero) {
-        //https://stackoverflow.com/questions/6524196/java-get-pixel-array-from-image
-        //byte[] pixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
         int width = img.getWidth();
         int height = img.getHeight();
-//        int rgb = 0;
-//        int red = 0;
-//        int green = 0;
-//        int blue = 0;
         String colorName;
 
         Bandera bandera = new Bandera(fichero);
@@ -168,10 +136,6 @@ public class Modelo implements Eventos {
         //algoritmo tradicional de pixelado
         for (int pixelX = 0; pixelX < width; pixelX++) {
             for (int pixelY = 0; pixelY < height; pixelY++) {
-//                rgb = img.getRGB(pixelX, pixelY);
-//                red = (rgb & 0xff) >> 16;
-//                green = (rgb & 0xff) >> 8;
-//                blue = (rgb & 0xff);
                 colorName = paleta.getNombre(paleta.analizarColor(new Color(img.getRGB(pixelX, pixelY))));
                 colores.put(colorName, colores.get(colorName) + 1);
             }
@@ -202,8 +166,9 @@ public class Modelo implements Eventos {
         }
     }
 
+    // cargamos banderas en banderasBD mientras se crea
     public void crearBD(String fileBD) {
-        // cargamos banderas en banderasBD mientras se crea???
+        
         try {
 
             String base = "flags/";
@@ -214,16 +179,12 @@ public class Modelo implements Eventos {
             Bandera bandera;
             esc = new Escritura(fileBD);
             banderasBD = new HashMap<>();
-            int aux = 0;
-            int longuitud = ficheros.length;
             for (String fichero : ficheros) {
 
                 bfImage = ImageIO.read(new File(base + fichero));
                 bandera = procesarBD(bfImage, fichero);
-                grabarBD(bandera); //escribir bandera en fichero;
+                grabarBD(bandera); //escribe bandera en fichero;
                 banderasBD.put(bandera.getNombrePais(), bandera); //cargamos en BD a la vez
-                aux++;
-                //System.out.println("bandera creada " + aux + " de " + longuitud);
                 System.out.println(bandera.toString());
             }
             //escribir bandera centinela
@@ -258,8 +219,7 @@ public class Modelo implements Eventos {
 
     }
 
-    //función que hay que rotocar seguro pero de momento se queda asi porque me da pereza encontrar otra forma
-    //hago esto para que se puedan ver diferente banderas seleccionadas
+    //función que permite ver diferente banderas seleccionadas
     public void deteccionBandera() {
 
         Bandera bandera;
@@ -286,15 +246,13 @@ public class Modelo implements Eventos {
             }
         }
 
-        
-
         for (Map.Entry<String, Integer> iterador : hashSolucion.entrySet()) {
 
             Nodo nodo = new Nodo(iterador.getKey(), iterador.getValue());
             solucionFinal.add(nodo);
         }
         solucionFinal.sort((t, t1) -> {
-            return t1.getValor() - t.getValor(); //To change body of generated lambdas, choose Tools | Templates.
+            return t1.getValor() - t.getValor();
         });
         System.out.println(solucionFinal.toString());
         

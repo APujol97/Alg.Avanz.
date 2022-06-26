@@ -5,10 +5,8 @@
  */
 package Control;
 
-import Modelo.Bandera;
 import Principal.Eventos;
 import Principal.Main;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,8 +17,6 @@ import java.util.logging.Logger;
 public class Control extends Thread implements Eventos {
 
     private Main prog;
-    private int type;
-    private long tiempo;
 
     public Control(Main p) {
         prog = p;
@@ -28,7 +24,7 @@ public class Control extends Thread implements Eventos {
 
     public void run() {
         try {
-            //Solo hay un caso de ejecución contemplado de momento, que es el de analizar la imagen png aportada
+            //analiza la imagen png aportada
             prog.getModel().deteccionBandera();
             
         } catch (Exception ex) {

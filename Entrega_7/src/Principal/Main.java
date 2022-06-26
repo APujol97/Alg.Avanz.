@@ -48,10 +48,6 @@ public class Main implements Eventos {
         }
     }
     
-//    public String getDataBaseFile(){
-//        return dataBaseFile;
-//    }
-    
     /*
         Función simple de la comunicación por eventos
      */
