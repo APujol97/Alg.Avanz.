@@ -256,9 +256,6 @@ public class Modelo implements Eventos {
             }
         }
 
-        System.out.println(valor + " " + maxpoint);
-        System.out.println(hashSolucion.toString());
-
         //se genera lista de países candidatos en orden descendiente para pintar en la vista
         for (Map.Entry<String, Integer> iterador : hashSolucion.entrySet()) {
 
@@ -267,11 +264,6 @@ public class Modelo implements Eventos {
                 solucionFinal.add(nodo);
             }
         }
-//        solucionFinal.sort((t, t1) -> {
-//            return t1.getValor() - t.getValor();
-//        });
-
-        System.out.println(solucionFinal.toString());
 
         banderasBD.entrySet().forEach((entry) -> {
             entry.getValue().setPoints(0);
