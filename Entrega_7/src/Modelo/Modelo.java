@@ -227,10 +227,13 @@ public class Modelo implements Eventos {
         hashSolucion = new HashMap<>();
         solucionFinal = new ArrayList<>();
         
-
+        //algoritmo Montecarlo -> 5 veces
         for (int i = 0; i < 5; i++) {
+            //se genera bandera con algoritmo numérico analizando 500 píxeles
             bandera = procesarImagenBandera(imagenElegida, 500);
+            //se obtiene lista de países candidatos
             paisesSimilares = getNombreBanderaDeImagen(bandera);
+            //sepuntúa repetición de países
             for (int j = 0; j < paisesSimilares.size(); j++) {
                 nombre = paisesSimilares.get(j);
                 if (hashSolucion.containsKey(nombre)) {
@@ -243,6 +246,7 @@ public class Modelo implements Eventos {
             }
         }
 
+        //se genera lista de países candidatos en orden descendiente para pintar en la vista
         for (Map.Entry<String, Integer> iterador : hashSolucion.entrySet()) {
 
             Nodo nodo = new Nodo(iterador.getKey(), iterador.getValue());
